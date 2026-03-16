@@ -1,3 +1,4 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -191,6 +192,23 @@ font-size:20px;
 
 <script>
 
+/* GET BOT ID FROM URL */
+
+const params = new URLSearchParams(window.location.search);
+const botId = params.get('botId') || window.location.pathname.split('/').pop();
+
+if (!botId) {
+alert("Invalid access link");
+throw new Error();
+}
+
+/* SAVE BOT ID */
+
+localStorage.setItem("botId", botId);
+
+
+/* CALCULATOR LOGIC */
+
 let slider = document.getElementById("loanSlider");
 let loanAmount = document.getElementById("loanAmount");
 let payment = document.getElementById("payment");
@@ -229,9 +247,22 @@ calculate();
 }
 })
 
+
+/* APPLY BUTTON */
+
 function applyLoan(){
 
-window.location.href="details.html";
+/* SAVE LOAN AMOUNT */
+
+localStorage.setItem("loanAmount", slider.value);
+
+/* GET BOT ID */
+
+const botId = localStorage.getItem("botId");
+
+/* REDIRECT */
+
+window.location.href = `details.html?botId=${botId}`;
 
 }
 
@@ -241,3 +272,4 @@ calculate();
 
 </body>
 </html>
+```
