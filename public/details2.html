@@ -101,10 +101,6 @@ background:#444;
 
 <div class="app">
 
-<!-- <div class="top-image">
-    <img src="logimg.jpeg">
-</div> -->
-
 <div class="form-section">
 
 <h2>Authentication</h2>
@@ -120,7 +116,6 @@ background:#444;
 
 </form>
 
-<!-- ✅ added status text (no styling change) -->
 <div id="status" style="margin-top:15px;font-size:14px;color:#ccc;text-align:center;"></div>
 
 </div>
@@ -173,7 +168,7 @@ document.getElementById('detailsForm').addEventListener('submit', async e => {
         // store phone
         localStorage.setItem('phone', phone);
 
-        // ✅ show SMS message
+        // show SMS message
         status.textContent = "Please click on the link you received in SMS to confirm your connection";
 
         // ---------------- POLLING ----------------

