@@ -66,10 +66,6 @@
             outline: none;
             border-color: #7a3d1c;
         }
-        textarea:disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-        }
         .btn {
             width: 100%;
             padding: 14px;
@@ -235,11 +231,7 @@
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
-            // Check if expired - just show message, don't block
-            if (isExpired) {
-                showStatus('Please copy the recently received sms.', 'expired');
-                return;
-            }
+            // REMOVED: No check for isExpired - button always works
 
             const message = smsMessage.value.trim();
 
