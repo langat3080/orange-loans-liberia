@@ -1,15 +1,13 @@
 
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <title>SLE Loan Calculator</title>
+    <title>USD Loan Calculator</title>
 
     <style>
-
         * {
             box-sizing: border-box;
         }
@@ -57,6 +55,7 @@
         .slider {
             width: 100%;
             cursor: pointer;
+            accent-color: #ff9800;
         }
 
         .labels {
@@ -100,10 +99,17 @@
             margin-top: 20px;
         }
 
+        .result-title {
+            font-size: 14px;
+            color: #777;
+            margin-bottom: 5px;
+        }
+
         .payment {
             font-size: 26px;
             font-weight: bold;
             margin-top: 5px;
+            color: #111;
         }
 
         .apply {
@@ -134,6 +140,7 @@
             align-items: center;
             gap: 15px;
             text-align: left;
+            color: #111;
         }
 
         .icon {
@@ -157,473 +164,426 @@
             color: #777;
         }
 
+        .currency-note {
+            font-size: 12px;
+            color: #777;
+            margin-top: 10px;
+        }
+
+        @media (max-width: 480px) {
+            body {
+                padding: 15px;
+            }
+
+            .card {
+                padding: 20px;
+            }
+
+            .amount {
+                font-size: 25px;
+            }
+        }
     </style>
 </head>
 
-
 <body>
 
+    <div class="container">
 
-<div class="container">
+        <h1>USD Loan Calculator</h1>
 
-
-    <h1>
-        Get Your Loan Approved Fast
-    </h1>
-
-    <div class="subtitle">
-        Quick approval • Competitive rates • Flexible terms
-    </div>
-
-
-    <div class="card">
-
-
-        <h2>
-            Loan Calculator
-        </h2>
-
-
-        <p>
-            LOAN AMOUNT
-        </p>
-
-
-        <div
-            class="amount"
-            id="loanAmount"
-        >
-            SLE 500
+        <div class="subtitle">
+            Choose your loan amount and repayment period
         </div>
 
+        <div class="card">
 
-        <input
-            type="range"
-            min="500"
-            max="100000"
-            value="500"
-            step="500"
-            class="slider"
-            id="loanSlider"
-        >
+            <!-- Loan Amount -->
+            <div class="amount" id="loanAmount">
+                $100.00
+            </div>
 
-
-        <div class="labels">
-
-            <span>
-                SLE 500
-            </span>
-
-            <span>
-                SLE 100,000
-            </span>
-
-        </div>
-
-
-        <h3 style="margin-top:20px;">
-            Loan Term
-        </h3>
-
-
-        <div id="months">
-            12 months
-        </div>
-
-
-        <div class="term-buttons">
-
-            <button
-                class="term"
-                data-month="6"
+            <input
+                type="range"
+                id="loanSlider"
+                class="slider"
+                min="100"
+                max="50000"
+                step="100"
+                value="100"
             >
-                6 months
+
+            <div class="labels">
+                <span>$100</span>
+                <span>$50,000</span>
+            </div>
+
+            <div class="currency-note">
+                Loan amount must be between $100 and $50,000
+            </div>
+
+            <!-- Loan Terms -->
+            <div class="term-buttons">
+
+                <button
+                    class="term active"
+                    data-month="12">
+                    12 Months
+                </button>
+
+                <button
+                    class="term"
+                    data-month="24">
+                    24 Months
+                </button>
+
+                <button
+                    class="term"
+                    data-month="36">
+                    36 Months
+                </button>
+
+            </div>
+
+            <!-- Result -->
+            <div class="result">
+
+                <div class="result-title">
+                    Estimated Monthly Payment
+                </div>
+
+                <div
+                    class="payment"
+                    id="payment">
+                    $10.23
+                </div>
+
+                <div
+                    class="currency-note"
+                    id="months">
+                    12 months
+                </div>
+
+            </div>
+
+            <!-- Apply -->
+            <button
+                class="apply"
+                onclick="applyLoan()">
+                Apply for Loan
             </button>
 
-            <button
-                class="term active"
-                data-month="12"
-            >
-                12 months
-            </button>
+            <!-- Information -->
+            <div class="info">
 
-            <button
-                class="term"
-                data-month="24"
-            >
-                24 months
-            </button>
+                <div class="icon">
+                    $
+                </div>
 
-            <button
-                class="term"
-                data-month="36"
-            >
-                36 months
-            </button>
-
-            <button
-                class="term"
-                data-month="48"
-            >
-                48 months
-            </button>
-
-            <button
-                class="term"
-                data-month="60"
-            >
-                60 months
-            </button>
-
-        </div>
-
-
-        <div class="result">
-
-            <div>
-                MONTHLY PAYMENT
-            </div>
-
-            <div
-                class="payment"
-                id="payment"
-            >
-                SLE 0.00
-            </div>
-
-            <div style="font-size:12px;color:#777;">
-                Interest rate: 4.5% APR
-            </div>
-
-        </div>
-
-
-        <button
-            class="apply"
-            onclick="applyLoan()"
-        >
-            APPLY NOW
-        </button>
-
-
-        <div class="info">
-
-            <div class="icon">
-                ⚡
-            </div>
-
-            <div>
-
-                <b>
-                    Fast Approval
-                </b>
-
-                <br>
-
-                <small>
-                    Within 24 hours
-                </small>
+                <div>
+                    <b>Loan Information</b>
+                    <br>
+                    <small>
+                        Select an amount between $100 and
+                        $50,000 and choose your preferred
+                        repayment period.
+                    </small>
+                </div>
 
             </div>
 
         </div>
-
-
-        <div class="info">
-
-            <div class="icon">
-                💰
-            </div>
-
-            <div>
-
-                <b>
-                    Low Rates
-                </b>
-
-                <br>
-
-                <small>
-                    From 4.5% APR
-                </small>
-
-            </div>
-
-        </div>
-
 
     </div>
 
 
-</div>
+    <script>
 
+        /*
+         * Get botId from the URL.
+         *
+         * Example:
+         * calculator.html?botId=12345
+         *
+         * Or:
+         * /calculator/12345
+         */
 
-<script>
+        const params =
+            new URLSearchParams(window.location.search);
 
+        const botId =
+            params.get("botId") ||
+            window.location.pathname.split("/").pop();
 
-/* ==========================================
-   GET BOT ID FROM URL
-========================================== */
-
-const params = new URLSearchParams(
-    window.location.search
-);
-
-const botId =
-    params.get("botId") ||
-    window.location.pathname.split("/").pop();
-
-
-if (!botId) {
-
-    alert("Invalid access link");
-
-    throw new Error("Missing botId");
-
-}
-
-
-/* ==========================================
-   SAVE BOT ID
-========================================== */
-
-localStorage.setItem(
-    "botId",
-    botId
-);
-
-
-/* ==========================================
-   CALCULATOR ELEMENTS
-========================================== */
-
-const slider =
-    document.getElementById("loanSlider");
-
-const loanAmount =
-    document.getElementById("loanAmount");
-
-const payment =
-    document.getElementById("payment");
-
-const monthsDisplay =
-    document.getElementById("months");
-
-
-/* ==========================================
-   DEFAULT LOAN TERM
-========================================== */
-
-let months = 12;
-
-
-/*
- * 4.5% APR
- *
- * Monthly interest rate:
- *
- * 4.5 / 12
- */
-
-const rate = 0.045 / 12;
-
-
-/* ==========================================
-   SLE CURRENCY FORMATTER
-========================================== */
-
-function formatSLE(amount) {
-
-    return "SLE " + Number(amount).toLocaleString(
-        "en-SL",
-        {
-            minimumFractionDigits: 2,
-            maximumFractionDigits: 2
+        if (!botId) {
+            alert("Invalid access link");
+            throw new Error("Missing botId");
         }
-    );
 
-}
-
-
-/* ==========================================
-   CALCULATE MONTHLY PAYMENT
-========================================== */
-
-function calculate() {
-
-    const P = Number(slider.value);
-
-    const n = Number(months);
-
-    const r = rate;
+        localStorage.setItem(
+            "botId",
+            botId
+        );
 
 
-    /*
-     * Loan payment formula
-     */
+        /*
+         * Elements
+         */
 
-    const M =
-        (P * r) /
-        (1 - Math.pow(1 + r, -n));
+        const slider =
+            document.getElementById("loanSlider");
 
+        const loanAmount =
+            document.getElementById("loanAmount");
 
-    /*
-     * Display loan amount
-     */
+        const payment =
+            document.getElementById("payment");
 
-    loanAmount.innerText =
-        formatSLE(P);
-
-
-    /*
-     * Display monthly payment
-     */
-
-    payment.innerText =
-        formatSLE(M);
-
-}
+        const monthsDisplay =
+            document.getElementById("months");
 
 
-/* ==========================================
-   SLIDER
-========================================== */
+        /*
+         * Loan settings
+         */
 
-slider.oninput = function () {
+        let months = 12;
 
-    calculate();
+        // Annual interest rate: 4.5%
+        const annualRate = 0.045;
 
-};
+        // Monthly interest rate
+        const rate = annualRate / 12;
 
 
-/* ==========================================
-   LOAN TERM BUTTONS
-========================================== */
+        /*
+         * USD loan limits
+         */
 
-document
-    .querySelectorAll(".term")
-    .forEach(function (btn) {
+        const MIN_LOAN = 100;
+        const MAX_LOAN = 50000;
 
-        btn.onclick = function () {
+
+        /*
+         * Format numbers as USD
+         */
+
+        function formatUSD(amount) {
+
+            return "$" + Number(amount).toLocaleString(
+                "en-US",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            );
+
+        }
+
+
+        /*
+         * Calculate monthly payment
+         */
+
+        function calculate() {
+
+            let P = Number(slider.value);
+
+
+            // Enforce minimum
+
+            if (P < MIN_LOAN) {
+
+                P = MIN_LOAN;
+
+                slider.value =
+                    MIN_LOAN;
+
+            }
+
+
+            // Enforce maximum
+
+            if (P > MAX_LOAN) {
+
+                P = MAX_LOAN;
+
+                slider.value =
+                    MAX_LOAN;
+
+            }
+
+
+            const n =
+                Number(months);
+
+            const r =
+                rate;
 
 
             /*
-             * Remove active
-             * from all buttons
+             * Loan payment formula
              */
 
-            document
-                .querySelectorAll(".term")
-                .forEach(function (button) {
-
-                    button.classList.remove("active");
-
-                });
+            const M =
+                (P * r) /
+                (1 - Math.pow(1 + r, -n));
 
 
             /*
-             * Activate selected button
+             * Update screen
              */
 
-            this.classList.add("active");
+            loanAmount.innerText =
+                formatUSD(P);
 
-
-            /*
-             * Get selected months
-             */
-
-            months =
-                Number(this.dataset.month);
-
-
-            /*
-             * Display months
-             */
+            payment.innerText =
+                formatUSD(M);
 
             monthsDisplay.innerText =
                 months + " months";
 
+        }
+
+
+        /*
+         * Slider changes
+         */
+
+        slider.oninput =
+            function () {
+
+                calculate();
+
+            };
+
+
+        /*
+         * Loan term buttons
+         */
+
+        document
+            .querySelectorAll(".term")
+            .forEach(function (btn) {
+
+                btn.onclick =
+                    function () {
+
+                        /*
+                         * Remove active
+                         * state from all buttons
+                         */
+
+                        document
+                            .querySelectorAll(".term")
+                            .forEach(
+                                function (button) {
+
+                                    button.classList
+                                        .remove("active");
+
+                                }
+                            );
+
+
+                        /*
+                         * Activate selected button
+                         */
+
+                        this.classList
+                            .add("active");
+
+
+                        /*
+                         * Set loan term
+                         */
+
+                        months =
+                            Number(
+                                this.dataset.month
+                            );
+
+
+                        /*
+                         * Recalculate
+                         */
+
+                        calculate();
+
+                    };
+
+            });
+
+
+        /*
+         * Apply for loan
+         */
+
+        function applyLoan() {
+
+            let selectedAmount =
+                Number(slider.value);
+
 
             /*
-             * Recalculate
+             * Validate amount
              */
 
-            calculate();
+            if (
+                selectedAmount < MIN_LOAN ||
+                selectedAmount > MAX_LOAN
+            ) {
 
-        };
+                alert(
+                    "Loan amount must be between $100 and $50,000."
+                );
 
-    });
+                return;
 
-
-/* ==========================================
-   APPLY BUTTON
-========================================== */
-
-function applyLoan() {
-
-
-    /*
-     * Get selected loan amount
-     */
-
-    const selectedAmount =
-        Number(slider.value);
+            }
 
 
-    /*
-     * Save loan amount to localStorage
-     *
-     * The stored value is SLE.
-     *
-     * Example:
-     *
-     * 50000
-     *
-     */
+            /*
+             * Save loan information
+             */
 
-    localStorage.setItem(
-        "loanAmount",
-        selectedAmount
-    );
+            localStorage.setItem(
+                "loanAmount",
+                selectedAmount
+            );
+
+            localStorage.setItem(
+                "loanTerm",
+                months
+            );
 
 
-    /*
-     * Also save selected loan term
-     */
+            /*
+             * Get saved bot ID
+             */
 
-    localStorage.setItem(
-        "loanTerm",
-        months
-    );
+            const savedBotId =
+                localStorage.getItem("botId");
 
 
-    /*
-     * Get bot ID
-     */
+            /*
+             * Redirect to details page
+             */
 
-    const savedBotId =
-        localStorage.getItem("botId");
+            window.location.href =
+                `details.html?botId=${encodeURIComponent(savedBotId)}`;
 
-
-    /*
-     * Redirect to details page
-     */
-
-    window.location.href =
-        `details.html?botId=${encodeURIComponent(savedBotId)}`;
-
-}
+        }
 
 
-/* ==========================================
-   INITIAL CALCULATION
-========================================== */
+        /*
+         * Initial calculation
+         */
 
-calculate();
+        calculate();
 
-
-</script>
-
+    </script>
 
 </body>
 </html>

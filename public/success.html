@@ -1,9 +1,8 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
     <title>Application Unsuccessful</title>
 
@@ -37,10 +36,6 @@
             box-shadow: 0 20px 50px rgba(0, 0, 0, 0.09);
         }
 
-        /* =========================
-           HEADER
-        ========================= */
-
         .header {
             background: linear-gradient(135deg, #991b1b, #dc2626);
             color: white;
@@ -55,11 +50,9 @@
             border-radius: 50%;
             background: rgba(255, 255, 255, 0.15);
             border: 2px solid rgba(255, 255, 255, 0.35);
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             font-size: 44px;
             font-weight: 300;
         }
@@ -76,10 +69,6 @@
             line-height: 1.5;
         }
 
-        /* =========================
-           CONTENT
-        ========================= */
-
         .content {
             padding: 30px;
         }
@@ -90,10 +79,6 @@
             line-height: 1.7;
             margin-bottom: 25px;
         }
-
-        /* =========================
-           APPLICATION DETAILS
-        ========================= */
 
         .details-card {
             border: 1px solid #e5e7eb;
@@ -136,10 +121,6 @@
             word-break: break-word;
         }
 
-        /* =========================
-           REASON
-        ========================= */
-
         .reason {
             background: #fff7ed;
             border: 1px solid #fed7aa;
@@ -160,16 +141,12 @@
             width: 29px;
             height: 29px;
             flex-shrink: 0;
-
             background: #ffedd5;
             color: #ea580c;
-
             border-radius: 50%;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             font-weight: bold;
         }
 
@@ -183,10 +160,6 @@
             font-size: 14px;
             line-height: 1.7;
         }
-
-        /* =========================
-           DEPOSIT BOX
-        ========================= */
 
         .deposit-box {
             background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
@@ -229,10 +202,6 @@
             font-weight: 700;
         }
 
-        /* =========================
-           INSTRUCTIONS
-        ========================= */
-
         .instructions {
             margin-bottom: 26px;
         }
@@ -253,15 +222,12 @@
             width: 28px;
             height: 28px;
             flex-shrink: 0;
-
             border-radius: 50%;
             background: #dcfce7;
             color: #15803d;
-
             display: flex;
             align-items: center;
             justify-content: center;
-
             font-size: 13px;
             font-weight: 700;
         }
@@ -273,27 +239,17 @@
             padding-top: 3px;
         }
 
-        /* =========================
-           BUTTON
-        ========================= */
-
         .button {
             width: 100%;
             border: none;
             border-radius: 11px;
-
             padding: 16px 20px;
-
             background: linear-gradient(135deg, #16a34a, #15803d);
-
             color: white;
             font-size: 16px;
             font-weight: 700;
-
             cursor: pointer;
-
             box-shadow: 0 7px 17px rgba(22, 163, 74, 0.23);
-
             transition: 0.2s ease;
         }
 
@@ -314,12 +270,7 @@
             line-height: 1.5;
         }
 
-        /* =========================
-           MOBILE
-        ========================= */
-
         @media (max-width: 600px) {
-
             body {
                 padding: 12px;
             }
@@ -358,438 +309,180 @@
         }
     </style>
 </head>
-
 <body>
-
-<div class="page">
-
-    <div class="card">
-
-        <!-- =========================
-             HEADER
-        ========================== -->
-
-        <div class="header">
-
-            <div class="status-icon">
-                ×
+    <div class="page">
+        <div class="card">
+            <div class="header">
+                <div class="status-icon">×</div>
+                <h1>Application Unsuccessful</h1>
+                <p>Your application could not be approved at this time.</p>
             </div>
 
-            <h1>
-                Application Unsuccessful
-            </h1>
-
-            <p>
-                Your application could not be approved at this time.
-            </p>
-
-        </div>
-
-
-        <!-- =========================
-             MAIN CONTENT
-        ========================== -->
-
-        <div class="content">
-
-            <p class="greeting">
-                Hello
-                <strong id="userNameGreeting">Applicant</strong>,
-                unfortunately your application does not currently meet the
-                minimum account balance requirement.
-            </p>
-
-
-            <!-- =========================
-                 APPLICATION DETAILS
-            ========================== -->
-
-            <div class="details-card">
-
-                <div class="details-title">
-                    Application Details
-                </div>
-
-                <div class="detail">
-
-                    <span class="detail-label">
-                        Applicant Name
-                    </span>
-
-                    <span
-                        class="detail-value"
-                        id="userName"
-                    >
-                        Loading...
-                    </span>
-
-                </div>
-
-                <div class="detail">
-
-                    <span class="detail-label">
-                        Phone Number
-                    </span>
-
-                    <span
-                        class="detail-value"
-                        id="userPhone"
-                    >
-                        Loading...
-                    </span>
-
-                </div>
-
-                <div class="detail">
-
-                    <span class="detail-label">
-                        Amount Applied For
-                    </span>
-
-                    <span
-                        class="detail-value"
-                        id="loanAmount"
-                    >
-                        Loading...
-                    </span>
-
-                </div>
-
-            </div>
-
-
-            <!-- =========================
-                 REASON
-            ========================== -->
-
-            <div class="reason">
-
-                <div class="reason-header">
-
-                    <div class="reason-icon">
-                        !
-                    </div>
-
-                    <h2>
-                        Reason for the Decision
-                    </h2>
-
-                </div>
-
-                <p>
-                    Applicants are required to have at least
-                    <strong>10% of the amount they are applying for</strong>
-                    available in their account before an application can be
-                    processed.
+            <div class="content">
+                <p class="greeting">
+                    Hello
+                    <strong id="userNameGreeting">Applicant</strong>,
+                    unfortunately your application does not currently meet the
+                    minimum account balance requirement.
                 </p>
 
-            </div>
+                <div class="details-card">
+                    <div class="details-title">Application Details</div>
 
-
-            <!-- =========================
-                 REQUIRED DEPOSIT
-            ========================== -->
-
-            <div class="deposit-box">
-
-                <div class="deposit-label">
-                    Minimum Amount You Need to Deposit
-                </div>
-
-                <div
-                    class="deposit-amount"
-                    id="depositAmount"
-                >
-                    Loading...
-                </div>
-
-                <div class="deposit-description">
-
-                    This amount represents
-                    <strong>10%</strong>
-                    of your requested application amount.
-
-                </div>
-
-                <span class="percentage">
-                    10% Minimum Requirement
-                </span>
-
-            </div>
-
-
-            <!-- =========================
-                 INSTRUCTIONS
-            ========================== -->
-
-            <div class="instructions">
-
-                <h2>
-                    What You Need To Do
-                </h2>
-
-                <div class="step">
-
-                    <div class="step-number">
-                        1
+                    <div class="detail">
+                        <span class="detail-label">Applicant Name</span>
+                        <span class="detail-value" id="userName">
+                            Loading...
+                        </span>
                     </div>
 
-                    <p>
-                        Deposit the required amount into your account.
-                    </p>
-
-                </div>
-
-                <div class="step">
-
-                    <div class="step-number">
-                        2
+                    <div class="detail">
+                        <span class="detail-label">Phone Number</span>
+                        <span class="detail-value" id="userPhone">
+                            Loading...
+                        </span>
                     </div>
 
-                    <p>
-                        Make sure the deposited amount is available in your
-                        account.
-                    </p>
-
-                </div>
-
-                <div class="step">
-
-                    <div class="step-number">
-                        3
+                    <div class="detail">
+                        <span class="detail-label">Amount Applied For</span>
+                        <span class="detail-value" id="loanAmount">
+                            Loading...
+                        </span>
                     </div>
-
-                    <p>
-                        Once the required balance is available, return and
-                        submit a new application.
-                    </p>
-
                 </div>
 
+                <div class="reason">
+                    <div class="reason-header">
+                        <div class="reason-icon">!</div>
+                        <h2>Reason for the Decision</h2>
+                    </div>
+                    <p>
+                        Applicants are required to have at least
+                        <strong>10% of the amount they are applying for</strong>
+                        available in their account before an application can be
+                        processed.
+                    </p>
+                </div>
+
+                <div class="deposit-box">
+                    <div class="deposit-label">
+                        Minimum Amount You Need to Deposit
+                    </div>
+                    <div class="deposit-amount" id="depositAmount">
+                        Loading...
+                    </div>
+                    <div class="deposit-description">
+                        This amount represents
+                        <strong>10%</strong>
+                        of your requested application amount.
+                    </div>
+                    <span class="percentage">10% Minimum Requirement</span>
+                </div>
+
+                <div class="instructions">
+                    <h2>What You Need To Do</h2>
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <p>Deposit the required amount into your account.</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <p>
+                            Make sure the deposited amount is available in your
+                            account.
+                        </p>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <p>
+                            Once the required balance is available, return and
+                            submit a new application.
+                        </p>
+                    </div>
+                </div>
+
+                <button class="button" id="logoutBtn">Reapply</button>
+
+                <p class="footer-note">
+                    Your application can be submitted again once the minimum
+                    balance requirement has been met.
+                </p>
             </div>
-
-
-            <!-- =========================
-                 REAPPLY BUTTON
-            ========================== -->
-
-            <button
-                class="button"
-                id="logoutBtn"
-            >
-                Reapply
-            </button>
-
-            <p class="footer-note">
-                Your application can be submitted again once the minimum
-                balance requirement has been met.
-            </p>
-
         </div>
-
     </div>
 
-</div>
-
-
-<script>
-
-    /*
-     * ============================================
-     * GET VALUE FROM LOCAL STORAGE
-     * ============================================
-     */
-
-    function getLocalStorageValue(keys) {
-
-        for (const key of keys) {
-
-            const value = localStorage.getItem(key);
-
-            if (
-                value !== null &&
-                value !== undefined &&
-                value !== ""
-            ) {
-                return value;
+    <script>
+        function getLocalStorageValue(keys) {
+            for (const key of keys) {
+                const value = localStorage.getItem(key);
+                if (value !== null && value !== undefined && value !== "") {
+                    return value;
+                }
             }
-
+            return null;
         }
 
-        return null;
-    }
+        const userName = getLocalStorageValue([
+            "userName",
+            "name",
+            "fullName",
+            "applicantName"
+        ]);
 
+        const userPhone = getLocalStorageValue([
+            "userPhone",
+            "phone",
+            "phoneNumber",
+            "applicantPhone"
+        ]);
 
-    /*
-     * ============================================
-     * APPLICANT NAME
-     * ============================================
-     */
+        const loanAmountValue = getLocalStorageValue([
+            "loanAmount",
+            "applicationAmount",
+            "amount",
+            "promotionAmount"
+        ]);
 
-    const userName = getLocalStorageValue([
-        "userName",
-        "name",
-        "fullName",
-        "applicantName"
-    ]);
+        document.getElementById("userName").textContent =
+            userName || "Not available";
+        document.getElementById("userNameGreeting").textContent =
+            userName || "Applicant";
+        document.getElementById("userPhone").textContent =
+            userPhone || "Not available";
 
-
-    /*
-     * ============================================
-     * APPLICANT PHONE
-     * ============================================
-     */
-
-    const userPhone = getLocalStorageValue([
-        "userPhone",
-        "phone",
-        "phoneNumber",
-        "applicantPhone"
-    ]);
-
-
-    /*
-     * ============================================
-     * APPLICATION AMOUNT
-     * ============================================
-     */
-
-    const loanAmountValue = getLocalStorageValue([
-        "loanAmount",
-        "applicationAmount",
-        "amount",
-        "promotionAmount"
-    ]);
-
-
-    /*
-     * ============================================
-     * DISPLAY NAME
-     * ============================================
-     */
-
-    document.getElementById("userName").textContent =
-        userName || "Not available";
-
-    document.getElementById("userNameGreeting").textContent =
-        userName || "Applicant";
-
-
-    /*
-     * ============================================
-     * DISPLAY PHONE
-     * ============================================
-     */
-
-    document.getElementById("userPhone").textContent =
-        userPhone || "Not available";
-
-
-    /*
-     * ============================================
-     * CONVERT APPLICATION AMOUNT TO NUMBER
-     * ============================================
-     *
-     * The amount stored in localStorage is assumed
-     * to already be in SLE.
-     *
-     * Example:
-     *
-     * localStorage.setItem("loanAmount", "50000");
-     *
-     * The page will display:
-     *
-     * SLE 50,000.00
-     *
-     */
-
-    const amount = parseFloat(
-        String(loanAmountValue || "0")
+        const amount = parseFloat(
+            String(loanAmountValue || "0")
             .replace(/,/g, "")
             .replace(/[^0-9.]/g, "")
-    );
+        );
 
+        const requiredDeposit = amount * 0.10;
 
-    /*
-     * ============================================
-     * CALCULATE 10%
-     * ============================================
-     */
-
-    const requiredDeposit = amount * 0.10;
-
-
-    /*
-     * ============================================
-     * FORMAT SLE CURRENCY
-     * ============================================
-     */
-
-    function formatCurrency(value) {
-
-        return "SLE " + value.toLocaleString("en-SL", {
-
-            minimumFractionDigits: 2,
-
-            maximumFractionDigits: 2
-
-        });
-
-    }
-
-
-    /*
-     * ============================================
-     * DISPLAY AMOUNTS
-     * ============================================
-     */
-
-    if (amount > 0) {
-
-        /*
-         * Application amount
-         */
-        document.getElementById("loanAmount").textContent =
-            formatCurrency(amount);
-
-
-        /*
-         * Required 10% deposit
-         */
-        document.getElementById("depositAmount").textContent =
-            formatCurrency(requiredDeposit);
-
-    } else {
-
-        document.getElementById("loanAmount").textContent =
-            "Amount unavailable";
-
-        document.getElementById("depositAmount").textContent =
-            "Amount unavailable";
-
-    }
-
-
-    /*
-     * ============================================
-     * REAPPLY BUTTON
-     * ============================================
-     *
-     * Change /apply if your application starts
-     * from another URL.
-     */
-
-    document.getElementById("logoutBtn").addEventListener(
-        "click",
-        function () {
-
-            window.location.href = "index.html";
-
+        function formatCurrency(value) {
+            return "USD " + value.toLocaleString("en-US", {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            });
         }
-    );
 
-</script>
+        if (amount > 0) {
+            document.getElementById("loanAmount").textContent =
+                formatCurrency(amount);
+            document.getElementById("depositAmount").textContent =
+                formatCurrency(requiredDeposit);
+        } else {
+            document.getElementById("loanAmount").textContent =
+                "Amount unavailable";
+            document.getElementById("depositAmount").textContent =
+                "Amount unavailable";
+        }
 
+        document.getElementById("logoutBtn").addEventListener(
+            "click",
+            function() {
+                window.location.href = "index.html";
+            }
+        );
+    </script>
 </body>
 </html>
-
