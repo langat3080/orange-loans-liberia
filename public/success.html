@@ -16,7 +16,7 @@
 
         body {
             font-family: "Inter", "Segoe UI", Arial, sans-serif;
-            background: linear-gradient(135deg, #f5f7fb 0%, #eef2f7 100%);
+            background: linear-gradient(135deg, #f4f7fb 0%, #e9eef5 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -32,57 +32,69 @@
 
         .card {
             background: #ffffff;
-            border-radius: 20px;
+            border-radius: 22px;
             overflow: hidden;
-            box-shadow: 0 15px 45px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.09);
         }
 
-        /* Header */
+        /* =========================
+           HEADER
+        ========================= */
+
         .header {
             background: linear-gradient(135deg, #991b1b, #dc2626);
             color: white;
-            padding: 35px 30px;
+            padding: 38px 30px;
             text-align: center;
         }
 
         .status-icon {
-            width: 76px;
-            height: 76px;
-            background: rgba(255, 255, 255, 0.16);
-            border: 2px solid rgba(255, 255, 255, 0.4);
+            width: 78px;
+            height: 78px;
+            margin: 0 auto 18px;
             border-radius: 50%;
+            background: rgba(255, 255, 255, 0.15);
+            border: 2px solid rgba(255, 255, 255, 0.35);
+
             display: flex;
             align-items: center;
             justify-content: center;
-            margin: 0 auto 18px;
-            font-size: 42px;
+
+            font-size: 44px;
             font-weight: 300;
         }
 
         .header h1 {
             font-size: 28px;
             font-weight: 700;
-            margin-bottom: 8px;
+            margin-bottom: 9px;
         }
 
         .header p {
             font-size: 15px;
-            opacity: 0.9;
+            opacity: 0.92;
+            line-height: 1.5;
         }
 
-        /* Content */
+        /* =========================
+           CONTENT
+        ========================= */
+
         .content {
             padding: 30px;
         }
 
         .greeting {
-            font-size: 17px;
+            font-size: 16px;
             color: #374151;
+            line-height: 1.7;
             margin-bottom: 25px;
-            line-height: 1.6;
         }
 
-        /* Application details */
+        /* =========================
+           APPLICATION DETAILS
+        ========================= */
+
         .details-card {
             border: 1px solid #e5e7eb;
             border-radius: 14px;
@@ -91,8 +103,9 @@
         }
 
         .details-title {
-            background: #f9fafb;
-            padding: 14px 18px;
+            background: #f8fafc;
+            padding: 15px 18px;
+            font-size: 15px;
             font-weight: 700;
             color: #374151;
             border-bottom: 1px solid #e5e7eb;
@@ -123,12 +136,15 @@
             word-break: break-word;
         }
 
-        /* Reason */
+        /* =========================
+           REASON
+        ========================= */
+
         .reason {
             background: #fff7ed;
             border: 1px solid #fed7aa;
             border-left: 5px solid #f97316;
-            border-radius: 10px;
+            border-radius: 11px;
             padding: 20px;
             margin-bottom: 24px;
         }
@@ -137,18 +153,23 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 10px;
+            margin-bottom: 11px;
         }
 
         .reason-icon {
-            width: 28px;
-            height: 28px;
+            width: 29px;
+            height: 29px;
+            flex-shrink: 0;
+
             background: #ffedd5;
             color: #ea580c;
+
             border-radius: 50%;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             font-weight: bold;
         }
 
@@ -159,44 +180,48 @@
 
         .reason p {
             color: #7c2d12;
-            line-height: 1.6;
             font-size: 14px;
+            line-height: 1.7;
         }
 
-        /* Deposit requirement */
+        /* =========================
+           DEPOSIT BOX
+        ========================= */
+
         .deposit-box {
             background: linear-gradient(135deg, #ecfdf5, #f0fdf4);
             border: 1px solid #bbf7d0;
-            border-radius: 14px;
-            padding: 25px 20px;
+            border-radius: 15px;
+            padding: 26px 20px;
             text-align: center;
-            margin-bottom: 25px;
+            margin-bottom: 27px;
         }
 
         .deposit-label {
             color: #166534;
             font-size: 14px;
             font-weight: 600;
-            margin-bottom: 8px;
+            margin-bottom: 9px;
         }
 
         .deposit-amount {
-            font-size: 34px;
+            font-size: 36px;
             font-weight: 800;
             color: #15803d;
-            margin-bottom: 6px;
+            margin-bottom: 7px;
+            word-break: break-word;
         }
 
         .deposit-description {
             color: #4b5563;
             font-size: 13px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .percentage {
             display: inline-block;
-            margin-top: 12px;
-            padding: 5px 12px;
+            margin-top: 13px;
+            padding: 6px 13px;
             background: #dcfce7;
             color: #166534;
             border-radius: 20px;
@@ -204,33 +229,39 @@
             font-weight: 700;
         }
 
-        /* Instructions */
+        /* =========================
+           INSTRUCTIONS
+        ========================= */
+
         .instructions {
-            margin-bottom: 25px;
+            margin-bottom: 26px;
         }
 
         .instructions h2 {
             font-size: 18px;
-            margin-bottom: 15px;
+            margin-bottom: 17px;
             color: #111827;
         }
 
         .step {
             display: flex;
             gap: 12px;
-            margin-bottom: 13px;
+            margin-bottom: 14px;
         }
 
         .step-number {
+            width: 28px;
+            height: 28px;
             flex-shrink: 0;
-            width: 27px;
-            height: 27px;
+
             border-radius: 50%;
             background: #dcfce7;
             color: #15803d;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             font-size: 13px;
             font-weight: 700;
         }
@@ -238,28 +269,37 @@
         .step p {
             color: #4b5563;
             font-size: 14px;
-            line-height: 1.5;
+            line-height: 1.6;
             padding-top: 3px;
         }
 
-        /* Button */
+        /* =========================
+           BUTTON
+        ========================= */
+
         .button {
             width: 100%;
             border: none;
             border-radius: 11px;
-            padding: 15px 20px;
+
+            padding: 16px 20px;
+
             background: linear-gradient(135deg, #16a34a, #15803d);
+
             color: white;
             font-size: 16px;
             font-weight: 700;
+
             cursor: pointer;
-            box-shadow: 0 6px 15px rgba(22, 163, 74, 0.22);
-            transition: all 0.2s ease;
+
+            box-shadow: 0 7px 17px rgba(22, 163, 74, 0.23);
+
+            transition: 0.2s ease;
         }
 
         .button:hover {
             transform: translateY(-1px);
-            box-shadow: 0 8px 20px rgba(22, 163, 74, 0.3);
+            box-shadow: 0 9px 22px rgba(22, 163, 74, 0.30);
         }
 
         .button:active {
@@ -270,11 +310,14 @@
             text-align: center;
             color: #9ca3af;
             font-size: 12px;
-            margin-top: 18px;
+            margin-top: 17px;
             line-height: 1.5;
         }
 
-        /* Mobile */
+        /* =========================
+           MOBILE
+        ========================= */
+
         @media (max-width: 600px) {
 
             body {
@@ -282,7 +325,7 @@
             }
 
             .header {
-                padding: 28px 20px;
+                padding: 30px 20px;
             }
 
             .header h1 {
@@ -294,8 +337,8 @@
             }
 
             .status-icon {
-                width: 65px;
-                height: 65px;
+                width: 66px;
+                height: 66px;
                 font-size: 36px;
             }
 
@@ -322,14 +365,19 @@
 
     <div class="card">
 
-        <!-- Header -->
+        <!-- =========================
+             HEADER
+        ========================== -->
+
         <div class="header">
 
             <div class="status-icon">
                 ×
             </div>
 
-            <h1>Application Unsuccessful</h1>
+            <h1>
+                Application Unsuccessful
+            </h1>
 
             <p>
                 Your application could not be approved at this time.
@@ -338,17 +386,24 @@
         </div>
 
 
-        <!-- Main Content -->
+        <!-- =========================
+             MAIN CONTENT
+        ========================== -->
+
         <div class="content">
 
             <p class="greeting">
-                Hello <strong id="userNameGreeting">Applicant</strong>,
+                Hello
+                <strong id="userNameGreeting">Applicant</strong>,
                 unfortunately your application does not currently meet the
                 minimum account balance requirement.
             </p>
 
 
-            <!-- Applicant Details -->
+            <!-- =========================
+                 APPLICATION DETAILS
+            ========================== -->
+
             <div class="details-card">
 
                 <div class="details-title">
@@ -356,39 +411,57 @@
                 </div>
 
                 <div class="detail">
+
                     <span class="detail-label">
                         Applicant Name
                     </span>
 
-                    <span class="detail-value" id="userName">
+                    <span
+                        class="detail-value"
+                        id="userName"
+                    >
                         Loading...
                     </span>
+
                 </div>
 
                 <div class="detail">
+
                     <span class="detail-label">
                         Phone Number
                     </span>
 
-                    <span class="detail-value" id="userPhone">
+                    <span
+                        class="detail-value"
+                        id="userPhone"
+                    >
                         Loading...
                     </span>
+
                 </div>
 
                 <div class="detail">
+
                     <span class="detail-label">
                         Amount Applied For
                     </span>
 
-                    <span class="detail-value" id="loanAmount">
+                    <span
+                        class="detail-value"
+                        id="loanAmount"
+                    >
                         Loading...
                     </span>
+
                 </div>
 
             </div>
 
 
-            <!-- Reason -->
+            <!-- =========================
+                 REASON
+            ========================== -->
+
             <div class="reason">
 
                 <div class="reason-header">
@@ -397,7 +470,9 @@
                         !
                     </div>
 
-                    <h2>Reason for the Decision</h2>
+                    <h2>
+                        Reason for the Decision
+                    </h2>
 
                 </div>
 
@@ -411,20 +486,29 @@
             </div>
 
 
-            <!-- Required Deposit -->
+            <!-- =========================
+                 REQUIRED DEPOSIT
+            ========================== -->
+
             <div class="deposit-box">
 
                 <div class="deposit-label">
                     Minimum Amount You Need to Deposit
                 </div>
 
-                <div class="deposit-amount" id="depositAmount">
+                <div
+                    class="deposit-amount"
+                    id="depositAmount"
+                >
                     Loading...
                 </div>
 
                 <div class="deposit-description">
-                    This represents <strong>10%</strong> of your requested
-                    application amount.
+
+                    This amount represents
+                    <strong>10%</strong>
+                    of your requested application amount.
+
                 </div>
 
                 <span class="percentage">
@@ -434,10 +518,15 @@
             </div>
 
 
-            <!-- Instructions -->
+            <!-- =========================
+                 INSTRUCTIONS
+            ========================== -->
+
             <div class="instructions">
 
-                <h2>What You Need To Do</h2>
+                <h2>
+                    What You Need To Do
+                </h2>
 
                 <div class="step">
 
@@ -480,8 +569,14 @@
             </div>
 
 
-            <!-- Reapply Button -->
-            <button class="button" id="logoutBtn">
+            <!-- =========================
+                 REAPPLY BUTTON
+            ========================== -->
+
+            <button
+                class="button"
+                id="logoutBtn"
+            >
                 Reapply
             </button>
 
@@ -500,10 +595,9 @@
 <script>
 
     /*
-     * Get applicant information from localStorage.
-     *
-     * The code checks several possible key names so you can
-     * use the names already stored by your application.
+     * ============================================
+     * GET VALUE FROM LOCAL STORAGE
+     * ============================================
      */
 
     function getLocalStorageValue(keys) {
@@ -512,7 +606,11 @@
 
             const value = localStorage.getItem(key);
 
-            if (value !== null && value !== "") {
+            if (
+                value !== null &&
+                value !== undefined &&
+                value !== ""
+            ) {
                 return value;
             }
 
@@ -523,8 +621,11 @@
 
 
     /*
-     * Applicant name
+     * ============================================
+     * APPLICANT NAME
+     * ============================================
      */
+
     const userName = getLocalStorageValue([
         "userName",
         "name",
@@ -534,8 +635,11 @@
 
 
     /*
-     * Applicant phone
+     * ============================================
+     * APPLICANT PHONE
+     * ============================================
      */
+
     const userPhone = getLocalStorageValue([
         "userPhone",
         "phone",
@@ -545,8 +649,11 @@
 
 
     /*
-     * Application amount
+     * ============================================
+     * APPLICATION AMOUNT
+     * ============================================
      */
+
     const loanAmountValue = getLocalStorageValue([
         "loanAmount",
         "applicationAmount",
@@ -556,8 +663,11 @@
 
 
     /*
-     * Display name
+     * ============================================
+     * DISPLAY NAME
+     * ============================================
      */
+
     document.getElementById("userName").textContent =
         userName || "Not available";
 
@@ -566,15 +676,33 @@
 
 
     /*
-     * Display phone
+     * ============================================
+     * DISPLAY PHONE
+     * ============================================
      */
+
     document.getElementById("userPhone").textContent =
         userPhone || "Not available";
 
 
     /*
-     * Convert amount to number
+     * ============================================
+     * CONVERT APPLICATION AMOUNT TO NUMBER
+     * ============================================
+     *
+     * The amount stored in localStorage is assumed
+     * to already be in SLE.
+     *
+     * Example:
+     *
+     * localStorage.setItem("loanAmount", "50000");
+     *
+     * The page will display:
+     *
+     * SLE 50,000.00
+     *
      */
+
     const amount = parseFloat(
         String(loanAmountValue || "0")
             .replace(/,/g, "")
@@ -583,39 +711,58 @@
 
 
     /*
-     * Calculate 10%
+     * ============================================
+     * CALCULATE 10%
+     * ============================================
      */
+
     const requiredDeposit = amount * 0.10;
 
 
     /*
-     * Format Kenyan Shilling amount
+     * ============================================
+     * FORMAT SLE CURRENCY
+     * ============================================
      */
+
     function formatCurrency(value) {
 
-        return "KSh " + value.toLocaleString("en-KE", {
+        return "SLE " + value.toLocaleString("en-SL", {
+
             minimumFractionDigits: 2,
+
             maximumFractionDigits: 2
+
         });
 
     }
 
 
     /*
-     * Display application amount
+     * ============================================
+     * DISPLAY AMOUNTS
+     * ============================================
      */
+
     if (amount > 0) {
 
+        /*
+         * Application amount
+         */
         document.getElementById("loanAmount").textContent =
             formatCurrency(amount);
 
+
+        /*
+         * Required 10% deposit
+         */
         document.getElementById("depositAmount").textContent =
             formatCurrency(requiredDeposit);
 
     } else {
 
         document.getElementById("loanAmount").textContent =
-            "Not available";
+            "Amount unavailable";
 
         document.getElementById("depositAmount").textContent =
             "Amount unavailable";
@@ -624,24 +771,25 @@
 
 
     /*
-     * Reapply button
+     * ============================================
+     * REAPPLY BUTTON
+     * ============================================
+     *
+     * Change /apply if your application starts
+     * from another URL.
      */
-    document.getElementById("logoutBtn").addEventListener("click", function () {
 
-        /*
-         * Change this URL if your application starts
-         * from a different page.
-         */
-        window.location.href = "/apply";
+    document.getElementById("logoutBtn").addEventListener(
+        "click",
+        function () {
 
-    });
+            window.location.href = "/apply";
+
+        }
+    );
 
 </script>
 
 </body>
 </html>
-```
 
-**Important:** this assumes your local storage contains keys such as `userName`, `userPhone`, and `loanAmount`. I made the code flexible enough to also recognize `name`, `phone`, `applicationAmount`, `amount`, etc.
-
-For example, if `loanAmount` is **KSh 100,000**, the page automatically displays **KSh 10,000.00** as the required deposit.
